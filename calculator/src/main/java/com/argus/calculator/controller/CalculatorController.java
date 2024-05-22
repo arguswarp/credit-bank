@@ -22,12 +22,12 @@ public class CalculatorController {
     @PostMapping("offers")
     @ResponseStatus(HttpStatus.OK)
     public List<LoanOfferDto> sendOffers(@Valid @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
-        return List.of();
+        return calculationService.generateLoanOffers(loanStatementRequestDto);
     }
 
     @PostMapping("calc")
     @ResponseStatus(HttpStatus.OK)
     public CreditDto sendCredit(@Valid @RequestBody ScoringDataDto scoringDataDto) {
-        return new CreditDto();
+        return calculationService.calculateCredit(scoringDataDto);
     }
 }
