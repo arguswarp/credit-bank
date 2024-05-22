@@ -41,7 +41,7 @@ public class LoanStatementRequestDto {
     //TODO custom annotation to check if older 18
     @NotNull
     @DateTimeFormat(pattern = "yyyy.MM.dd")
-    @PastOrPresent
+    @Past
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
     private LocalDate birthdate;
 
