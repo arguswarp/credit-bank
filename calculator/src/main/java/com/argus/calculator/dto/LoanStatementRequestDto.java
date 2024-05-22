@@ -1,6 +1,7 @@
 package com.argus.calculator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Builder
 @Data
 public class LoanStatementRequestDto {
     @NotNull
