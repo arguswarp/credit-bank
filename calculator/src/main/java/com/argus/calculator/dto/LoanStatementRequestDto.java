@@ -1,12 +1,10 @@
 package com.argus.calculator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -17,45 +15,45 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoanStatementRequestDto {
-    @NotNull
-    @DecimalMin("30000")
+
+    @NotNull(message = "Количество не должно быть пустым")
+    @DecimalMin(value = "30000", message = "Сумма кредита должна быть не меньше 30000")
     private BigDecimal amount;
     /**
      * Срок кредита
      */
-    @NotNull
-    @Min(6)
+    @NotNull(message = "Срок не должен быть пустым")
+    @Min(value = 6, message = "Срок кредита должен быть не меньше 6 месяцев ")
     private Integer term;
 
-    @NotBlank
-    @Size(min = 2, max = 30)
-    //TODO mb modify pattern
-    @Pattern(regexp = "^[a-zA-Z]+")
+    @NotBlank(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 30, message = "Имя должно быть от 2 до 30 символов длиной.")
+    @Pattern(regexp = "^[a-zA-Z]+", message = "Имя должно состоять из латинских букв")
     private String firstName;
 
-    @NotBlank
-    @Size(min = 2, max = 30)
-    @Pattern(regexp = "^+[a-zA-Z]+")
+    @NotBlank(message = "Фамилия не должна быть пустой")
+    @Size(min = 2, max = 30, message = "Фамилия должна быть от 2 до 30 символов длиной.")
+    @Pattern(regexp = "^[a-zA-Z]+", message = "Фамилия должна состоять из латинских букв")
     private String lastName;
 
     private String middleName;
     //TODO check if it fits the task
-    @NotBlank
-    @Email
+    @NotBlank(message = "Электронная почта не должна быть пустой")
+    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Электронная почта должна соответствовать общепринятому формату")
     private String email;
     //TODO custom annotation to check if older 18
     @NotNull
-    @DateTimeFormat(pattern = "yyyy.MM.dd")
     @Past
-    @JsonProperty("birthdate")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate birthdate;
 
-    @NotBlank
-    @Size(min = 4, max = 4)
+    @NotBlank(message = "Серия пасспорта не должна быть пустой")
+    @Size(min = 4, max = 4, message = "Серия паспорта должна состоять из 4 цифр")
+    @Pattern(regexp = "^[0-9]*$", message = "Серия паспорта должна состоять только из цифр")
     private String passportSeries;
 
-    @NotBlank
-    @Size(min = 6, max = 6)
+    @NotBlank(message = "Номер пасспорта не должен быть пустым")
+    @Size(min = 6, max = 6, message = "Номер паспорта должен состоять из 6 цифр")
+    @Pattern(regexp = "^[0-9]*$", message = "Номер паспорта должен состоять только из цифр")
     private String passportNumber;
 }
