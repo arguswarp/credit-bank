@@ -5,6 +5,7 @@ import com.argus.calculator.dto.LoanOfferDto;
 import com.argus.calculator.dto.LoanStatementRequestDto;
 import com.argus.calculator.dto.ScoringDataDto;
 import com.argus.calculator.service.CalculationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,14 +20,18 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 @Service
 public class CalculationServiceImpl implements CalculationService {
-    //TODO move to props
-    private final BigDecimal BASE_RATE = BigDecimal.valueOf(10);
 
-    private final BigDecimal AMOUNT_MULTIPLIER = BigDecimal.valueOf(1.3);
+    @Value("${calculator.base-rate}")
+    private BigDecimal BASE_RATE;
 
-    private final BigDecimal SUBTRAHEND_FOR_INSURANCE = ONE;
+    @Value("${calculator.insurance.rate-reduction}")
+    private BigDecimal INSURANCE_RATE_REDUCTION;
 
-    private final BigDecimal SUBTRAHEND_FOR_CLIENT = ONE;
+    @Value("${calculator.client.rate-reduction}")
+    private BigDecimal CLIENT_RATE_REDUCTION;
+
+    @Value("${calculator.insurance.coefficient}")
+    private BigDecimal INSURANCE_COEFFICIENT;
 
     private final MathContext MATH_CONTEXT = DECIMAL32;
 
@@ -48,14 +53,18 @@ public class CalculationServiceImpl implements CalculationService {
         int term = loanStatementRequest.getTerm();
         return LoanOfferDto.builder()
                 .requestedAmount(amount)
-                //TODO add method to change  amount by insurance and client
-                .totalAmount(amount.multiply(AMOUNT_MULTIPLIER))
+                .totalAmount(calculatePrescoringAmount(amount, isInsuranceEnabled))
                 .term(term)
-                .monthlyPayment(calculateMonthlyPayment(amount, term, rate))
+                .monthlyPayment(calculatePrescoringMonthlyPayment(amount, term, rate))
                 .rate(rate)
                 .isInsuranceEnabled(isInsuranceEnabled)
                 .isSalaryClient(isSalaryClient)
                 .build();
+    }
+
+    @Override
+    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
+        return null;
     }
 
     /**
@@ -78,7 +87,7 @@ public class CalculationServiceImpl implements CalculationService {
      * @param rate Годовая процентная ставка кредита
      * @return Сумма ежемесячного платежа
      */
-    private BigDecimal calculateMonthlyPayment(BigDecimal amount, int term, BigDecimal rate) {
+    private BigDecimal calculatePrescoringMonthlyPayment(BigDecimal amount, int term, BigDecimal rate) {
         //TODO rename
         BigDecimal monthlyRate = rate.divide(BigDecimal.valueOf(100), MATH_CONTEXT)
                 .divide(BigDecimal.valueOf(12), MATH_CONTEXT);
@@ -90,12 +99,11 @@ public class CalculationServiceImpl implements CalculationService {
     }
 
     private BigDecimal calculatePrescoringRate(boolean isInsuranceEnabled, boolean isSalaryClient) {
-        return BASE_RATE.subtract(isInsuranceEnabled ? SUBTRAHEND_FOR_INSURANCE : ZERO)
-                .subtract(isSalaryClient ? SUBTRAHEND_FOR_CLIENT : ZERO);
+        return BASE_RATE.subtract(isInsuranceEnabled ? INSURANCE_RATE_REDUCTION : ZERO)
+                .subtract(isSalaryClient ? CLIENT_RATE_REDUCTION : ZERO);
     }
 
-    @Override
-    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
-        return null;
+    private BigDecimal calculatePrescoringAmount(BigDecimal amount,boolean isInsuranceEnabled) {
+        return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE);
     }
 }

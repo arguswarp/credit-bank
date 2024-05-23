@@ -7,15 +7,25 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @SpringBootTest
+@Profile("test")
 class CalculationServiceImplTest {
 
     @Autowired
     private CalculationService calculationService;
+
+    private final BigDecimal CALCULATED_MONTHLY_PAY_FIRST = BigDecimal.valueOf(3466.53);
+
+    private final BigDecimal CALCULATED_MONTHLY_PAY_SECOND = BigDecimal.valueOf(3417.76);
+
+    private final BigDecimal CALCULATED_MONTHLY_PAY_THIRD = BigDecimal.valueOf(3321.43);
+
+    private final BigDecimal CALCULATED_MONTHLY_PAY_FOURTH = BigDecimal.valueOf(3273.87);
 
     @Test
     void generateLoanOffers() {
@@ -25,7 +35,11 @@ class CalculationServiceImplTest {
                 .build());
         Assertions.assertNotNull(offers);
         Assertions.assertEquals(4, offers.size());
-        Assertions.assertEquals(BigDecimal.valueOf(3226.72), offers.get(0).getMonthlyPayment());
+
+        Assertions.assertEquals(CALCULATED_MONTHLY_PAY_FIRST, offers.get(0).getMonthlyPayment());
+        Assertions.assertEquals(CALCULATED_MONTHLY_PAY_SECOND, offers.get(1).getMonthlyPayment());
+        Assertions.assertEquals(CALCULATED_MONTHLY_PAY_THIRD, offers.get(2).getMonthlyPayment());
+        Assertions.assertEquals(CALCULATED_MONTHLY_PAY_FOURTH, offers.get(3).getMonthlyPayment());
     }
 
     @Test

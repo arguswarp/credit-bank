@@ -7,4 +7,4 @@ calculator:
     rate-reduction: 1
 logging:
   level:
-    root: info
+    root: debug
