@@ -1,8 +1,11 @@
 package com.argus.calculator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -11,6 +14,8 @@ import java.time.LocalDate;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoanStatementRequestDto {
     @NotNull
     @DecimalMin("30000")
@@ -42,6 +47,7 @@ public class LoanStatementRequestDto {
     @NotNull
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     @Past
+    @JsonProperty("birthdate")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
     private LocalDate birthdate;
 
