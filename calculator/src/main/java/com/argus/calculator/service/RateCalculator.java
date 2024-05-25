@@ -5,6 +5,7 @@ import com.argus.calculator.model.enums.EmploymentStatus;
 import com.argus.calculator.model.enums.MaritalStatus;
 import com.argus.calculator.model.enums.Position;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import static java.math.BigDecimal.ZERO;
 //TODO magic numbers to props
 @AllArgsConstructor
 @Component
+@Slf4j
 public class RateCalculator {
 
     @Value("${calculator.base-rate:15}")
@@ -35,11 +37,13 @@ public class RateCalculator {
 
 
     public BigDecimal calculatePrescoringRate(boolean isInsuranceEnabled, boolean isSalaryClient) {
+        log.info("Calculating prescoring rate");
         return BASE_RATE.subtract(isInsuranceEnabled ? INSURANCE_RATE_REDUCTION : ZERO)
                 .subtract(isSalaryClient ? CLIENT_RATE_REDUCTION : ZERO);
     }
 
     public BigDecimal calculateScoringRate(ScoringDataDto scoringDataDto) {
+        log.info("Calculating scoring rate");
         BigDecimal rate = calculatePrescoringRate(scoringDataDto.getIsInsuranceEnabled(), scoringDataDto.getIsSalaryClient());
         return rate.add(rateAdditionByEmployment(scoringDataDto.getEmployment().getEmploymentStatus()))
                 .add(rateAdditionByPosition(scoringDataDto.getEmployment().getPosition()))

@@ -1,5 +1,6 @@
 package com.argus.calculator.dto;
 
+import com.argus.calculator.annotation.AgeLimit;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,14 +37,15 @@ public class LoanStatementRequestDto {
     @Pattern(regexp = "^[a-zA-Z]+", message = "Фамилия должна состоять из латинских букв")
     private String lastName;
 
+    @Size(min = 2, max = 30, message = "Отчество должно быть от 2 до 30 символов длиной.")
     private String middleName;
-    //TODO check if it fits the task
+
     @NotBlank(message = "Электронная почта не должна быть пустой")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Электронная почта должна соответствовать общепринятому формату")
     private String email;
-    //TODO custom annotation to check if older 18
-    @NotNull
-    @Past
+
+    @NotNull(message = "Дата рождения не может быть пустой")
+    @AgeLimit
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate birthdate;
 

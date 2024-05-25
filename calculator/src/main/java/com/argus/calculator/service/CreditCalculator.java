@@ -2,6 +2,7 @@ package com.argus.calculator.service;
 
 import com.argus.calculator.dto.PaymentScheduleElementDto;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 @AllArgsConstructor
 @Component
+@Slf4j
 public class CreditCalculator {
 
     @Value("${calculator.insurance.coefficient}")
@@ -50,6 +52,7 @@ public class CreditCalculator {
      * @return Сумма ежемесячного платежа
      */
     public BigDecimal calculateMonthlyPayment(BigDecimal amount, int term, BigDecimal rate) {
+        log.info("Calculating monthly payment");
         BigDecimal monthlyRate = getMonthlyRate(rate);
         //(1 + М) ^ S
         BigDecimal monthlyRateAddOnePowTerm = monthlyRate.add(ONE).pow(term);
@@ -59,18 +62,22 @@ public class CreditCalculator {
     }
 
     public BigDecimal calculateMonthlyPayment(BigDecimal amount, int term, BigDecimal rate, RoundingMode roundingMode) {
+        log.info("Calculating monthly payment with rounding mode {}", roundingMode);
         return calculateMonthlyPayment(amount, term, rate).setScale(2, roundingMode);
     }
 
     public BigDecimal calculateAmount(BigDecimal amount, boolean isInsuranceEnabled) {
+        log.info("Calculating amount");
         return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE).setScale(2, ROUNDING_MODE);
     }
 
     public BigDecimal calculatePSK(BigDecimal montlyPayment, int term) {
+        log.info("Calculating PSK");
         return montlyPayment.multiply(BigDecimal.valueOf(term)).setScale(2, ROUNDING_MODE);
     }
 
     public List<PaymentScheduleElementDto> calculatePaymentSchedule(BigDecimal amount, int term, BigDecimal monthlyPayment, BigDecimal rate) {
+        log.info("Calculating payment schedule");
         List<PaymentScheduleElementDto> paymentSchedule = new ArrayList<>();
         BigDecimal monthlyRate = getMonthlyRate(rate);
         LocalDate date = LocalDate.now().plusMonths(1);

@@ -6,6 +6,7 @@ import com.argus.calculator.service.CalculationService;
 import com.argus.calculator.service.CreditCalculator;
 import com.argus.calculator.service.RateCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import static com.argus.calculator.util.CalculatorUtils.getAge;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CalculationServiceImpl implements CalculationService {
 
     private final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
@@ -27,6 +29,7 @@ public class CalculationServiceImpl implements CalculationService {
 
     @Override
     public List<LoanOfferDto> generateLoanOffers(LoanStatementRequestDto loanStatementRequestDto) {
+        log.info("Generate loan offers");
         return List.of(
                 generateLoanOffer(loanStatementRequestDto, false, false),
                 generateLoanOffer(loanStatementRequestDto, false, true),
@@ -37,6 +40,7 @@ public class CalculationServiceImpl implements CalculationService {
 
     @Override
     public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
+        log.info("Calculate credit");
         if (isDenied(scoringDataDto)) {
             throw new ClientDeniedException("В займе отказано");
         }
@@ -59,6 +63,7 @@ public class CalculationServiceImpl implements CalculationService {
     }
 
     private LoanOfferDto generateLoanOffer(LoanStatementRequestDto loanStatementRequest, boolean isInsuranceEnabled, boolean isSalaryClient) {
+        log.info("Generate loan offer");
         BigDecimal amount = loanStatementRequest.getAmount();
         BigDecimal rate = rateCalculator.calculatePrescoringRate(isInsuranceEnabled, isSalaryClient);
         BigDecimal totalAmount = creditCalculator.calculateAmount(amount, isInsuranceEnabled);

@@ -1,5 +1,6 @@
 package com.argus.calculator.dto;
 
+import com.argus.calculator.annotation.AgeLimit;
 import com.argus.calculator.model.enums.MaritalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -40,9 +41,8 @@ public class ScoringDataDto {
     @NotBlank(message = "Пол не должен быть пустым")
     private String gender;
 
-    //TODO custom annotation to check if older 18
-    @NotNull
-    @Past
+    @NotNull(message = "Дата рождения не должна быть пустой")
+    @AgeLimit
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
     private LocalDate birthdate;
 
@@ -56,23 +56,23 @@ public class ScoringDataDto {
     @Pattern(regexp = "^[0-9]*$", message = "Номер паспорта должен состоять только из цифр")
     private String passportNumber;
 
-    @NotNull
-    @Future
+    @NotNull(message = "Дата окончания срока действия не должна быть пустой")
+    @Future(message = "Паспорт не должен быть просрочен")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
-    @NotBlank
+    @NotBlank(message = "Подразделение выдавшее пасспорт не может быть пустым")
     private String passportIssueBranch;
 
-    @NotNull
+    @NotNull(message = "Семейное положение не может быть пустым")
     private MaritalStatus maritalStatus;
 
     private Integer dependentAmount;
 
-    @NotNull
+    @NotNull(message = "Информация о трудоустройстве не может быть пустой")
     private EmploymentDto employment;
 
-    @NotNull
+    @NotNull(message = "Номер аккаунта не может быть пустым")
     private String accountNumber;
 
     private Boolean isInsuranceEnabled;

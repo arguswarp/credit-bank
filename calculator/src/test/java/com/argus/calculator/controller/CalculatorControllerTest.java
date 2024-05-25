@@ -39,7 +39,6 @@ class CalculatorControllerTest {
                   "term": 12,
                   "firstName": "John",
                   "lastName": "Doe",
-                  "middleName": "",
                   "email": "john.doe@mail.com",
                   "birthdate": "1990.01.01",
                   "passportSeries": "1234",
@@ -60,14 +59,11 @@ class CalculatorControllerTest {
                   "term": 12,
                   "firstName": "123",
                   "lastName": "Doe",
-                  "middleName": "",
                   "email": "@mail.com",
                   "birthdate": "1990.01.01",
                   "passportSeries": "1234",
                   "passportNumber": "123456"
                 }""";
-
-        Mockito.when(calculationService.generateLoanOffers(Mockito.any(LoanStatementRequestDto.class))).thenReturn(List.of());
 
         mockMvc.perform(post("/calculator/offers").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -81,7 +77,6 @@ class CalculatorControllerTest {
                   "term": 36,
                   "firstName": "John",
                   "lastName": "Doe",
-                  "middleName": "",
                   "gender": "male",
                   "birthdate": "1990.01.01",
                   "passportSeries": "1234",
@@ -119,7 +114,6 @@ class CalculatorControllerTest {
                   "term": 36,
                   "firstName": "John",
                   "lastName": "Doe",
-                  "middleName": "",
                   "gender": "male",
                   "birthdate": "1990.01.01",
                   "passportSeries": "1234",
@@ -141,10 +135,6 @@ class CalculatorControllerTest {
                   "isSalaryClient": false
                 }""";
 
-        Mockito.when(calculationService.calculateCredit(Mockito.any(ScoringDataDto.class))).thenReturn(CreditDto.builder()
-                .paymentSchedule(List.of())
-                .build());
-
         mockMvc.perform(post("/calculator/calc").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
@@ -157,7 +147,6 @@ class CalculatorControllerTest {
                   "term": 36,
                   "firstName": "John",
                   "lastName": "Doe",
-                  "middleName": "",
                   "gender": "male",
                   "birthdate": "1990.01.01",
                   "passportSeries": "1234",
@@ -184,5 +173,39 @@ class CalculatorControllerTest {
         mockMvc.perform(post("/calculator/calc").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("В займе отказано"));
+    }
+
+    @Test
+    void WhenAgeBelow18_ThenBadRequest() throws Exception {
+        String requestBody = """
+                {
+                  "amount": 30000,
+                  "term": 36,
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "gender": "male",
+                  "birthdate": "2020.01.01",
+                  "passportSeries": "1234",
+                  "passportNumber": "123456",
+                  "passportIssueDate": "2026.09.12",
+                  "passportIssueBranch": "some branch",
+                  "maritalStatus": "MARRIED",
+                  "dependentAmount": 0,
+                  "employment": {
+                    "employmentStatus": "EMPLOYED",
+                    "employerINN": "1234",
+                    "salary": 1,
+                    "position": "MANAGER",
+                    "workExperienceTotal": 360,
+                    "workExperienceCurrent": 36
+                  },
+                  "accountNumber": "123456",
+                  "isInsuranceEnabled": false,
+                  "isSalaryClient": false
+                }""";
+
+        mockMvc.perform(post("/calculator/calc").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").value("Возраст должен быть больше 18 лет"));
     }
 }
