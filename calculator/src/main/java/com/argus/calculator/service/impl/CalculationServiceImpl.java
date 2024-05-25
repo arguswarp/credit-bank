@@ -43,9 +43,9 @@ public class CalculationServiceImpl implements CalculationService {
         BigDecimal amount = creditCalculator.calculateAmount(scoringDataDto.getAmount(), scoringDataDto.getIsInsuranceEnabled());
         int term = scoringDataDto.getTerm();
         BigDecimal rate = rateCalculator.calculateScoringRate(scoringDataDto);
-        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, scoringDataDto.getTerm(), rate);
-        BigDecimal psk = creditCalculator.calculatePSK(monthlyPayment, scoringDataDto.getTerm());
-        List<PaymentScheduleElementDto> paymentSchedule = creditCalculator.calculatePaymentSchedule(amount, scoringDataDto.getTerm(), monthlyPayment, rate);
+        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, term, rate);
+        BigDecimal psk = creditCalculator.calculatePSK(monthlyPayment, term);
+        List<PaymentScheduleElementDto> paymentSchedule = creditCalculator.calculatePaymentSchedule(amount, term, monthlyPayment, rate);
         return CreditDto.builder()
                 .amount(amount)
                 .term(term)
