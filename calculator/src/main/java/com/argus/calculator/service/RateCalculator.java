@@ -4,6 +4,7 @@ import com.argus.calculator.dto.ScoringDataDto;
 import com.argus.calculator.model.enums.EmploymentStatus;
 import com.argus.calculator.model.enums.MaritalStatus;
 import com.argus.calculator.model.enums.Position;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +20,11 @@ import static com.argus.calculator.util.CalculatorUtils.getAge;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 //TODO magic numbers to props
+@AllArgsConstructor
 @Component
 public class RateCalculator {
 
-    @Value("${calculator.base-rate}")
+    @Value("${calculator.base-rate:15}")
     private BigDecimal BASE_RATE;
 
     @Value("${calculator.insurance.rate-reduction}")
@@ -70,7 +72,7 @@ public class RateCalculator {
             return BigDecimal.valueOf(3).negate();
         }
         if (maritalStatus == DIVORCED) {
-            return BigDecimal.valueOf(1);
+            return ONE;
         }
         return ZERO;
     }
