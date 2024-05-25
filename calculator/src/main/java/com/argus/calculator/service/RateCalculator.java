@@ -18,7 +18,7 @@ import static com.argus.calculator.model.enums.Position.TOP_MANAGER;
 import static com.argus.calculator.util.CalculatorUtils.getAge;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
-
+//TODO magic numbers to props
 @Component
 public class RateCalculator {
 

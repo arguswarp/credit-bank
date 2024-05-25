@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class ScoringDataDto {
 
     @NotNull(message = "Количество не должно быть пустым")
-    @DecimalMin(value = "30000", message = "Сумма кредита должна быть не меньше 30000")
+    @DecimalMin(value = "20000", message = "Сумма кредита должна быть не меньше 30000")
     private BigDecimal amount;
 
     @NotNull(message = "Срок не должен быть пустым")

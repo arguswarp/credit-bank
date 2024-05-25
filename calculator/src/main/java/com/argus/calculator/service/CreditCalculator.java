@@ -1,15 +1,19 @@
 package com.argus.calculator.service;
 
+import com.argus.calculator.dto.PaymentScheduleElementDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.argus.calculator.util.CalculatorUtils.getMonthlyRate;
 import static java.math.BigDecimal.ONE;
-import static java.math.MathContext.DECIMAL32;
+import static java.math.MathContext.DECIMAL64;
 import static java.math.RoundingMode.HALF_EVEN;
 
 @Component
@@ -18,7 +22,7 @@ public class CreditCalculator {
     @Value("${calculator.insurance.coefficient}")
     private BigDecimal INSURANCE_COEFFICIENT;
 
-    private final MathContext MATH_CONTEXT = DECIMAL32;
+    private final MathContext MATH_CONTEXT = DECIMAL64;
 
     private final RoundingMode ROUNDING_MODE = HALF_EVEN;
 
@@ -49,10 +53,56 @@ public class CreditCalculator {
         BigDecimal monthlyRateAddOnePowTerm = monthlyRate.add(ONE).pow(term);
         BigDecimal annuityCoefficient = monthlyRateAddOnePowTerm.multiply(monthlyRate)
                 .divide(monthlyRateAddOnePowTerm.subtract(ONE), MATH_CONTEXT);
-        return amount.multiply(annuityCoefficient).setScale(2, ROUNDING_MODE);
+        return amount.multiply(annuityCoefficient);
     }
 
     public BigDecimal calculateAmount(BigDecimal amount, boolean isInsuranceEnabled) {
         return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE);
+    }
+
+    public BigDecimal calculatePSK(BigDecimal montlyPayment, int term) {
+        return montlyPayment.multiply(BigDecimal.valueOf(term)).setScale(2, ROUNDING_MODE);
+    }
+
+    public List<PaymentScheduleElementDto> calculatePaymentSchedule(BigDecimal amount, int term, BigDecimal monthlyPayment, BigDecimal rate) {
+        List<PaymentScheduleElementDto> paymentSchedule = new ArrayList<>();
+        BigDecimal monthlyRate = getMonthlyRate(rate);
+        LocalDate date = LocalDate.now().plusMonths(1);
+        BigDecimal remainDebt = amount;
+        for (int i = 1; i <= term; i++) {
+            PaymentScheduleElementDto scheduleElement = calculatePaymentScheduleElement(i, date, monthlyPayment, remainDebt, monthlyRate);
+            paymentSchedule.add(scheduleElement);
+
+            date = date.plusMonths(1);
+            remainDebt = scheduleElement.getRemainDebt();
+
+            round(scheduleElement);
+        }
+        return paymentSchedule;
+    }
+
+    private PaymentScheduleElementDto calculatePaymentScheduleElement(int number, LocalDate date, BigDecimal monthlyPayment, BigDecimal debt, BigDecimal monthlyRate) {
+        BigDecimal interestPayment = debt.multiply(monthlyRate, MATH_CONTEXT);
+        BigDecimal debtPayment = monthlyPayment.subtract(interestPayment);
+        BigDecimal remainDebt = debt.subtract(debtPayment);
+        return PaymentScheduleElementDto.builder()
+                .number(number)
+                .date(date)
+                .totalPayment(monthlyPayment)
+                .interestPayment(interestPayment)
+                .debtPayment(debtPayment)
+                .remainDebt(remainDebt)
+                .build();
+    }
+
+    private void round(PaymentScheduleElementDto paymentScheduleElementDto) {
+        BigDecimal monthlyPayment = paymentScheduleElementDto.getTotalPayment();
+        BigDecimal interestPayment = paymentScheduleElementDto.getInterestPayment();
+        BigDecimal debtPayment = paymentScheduleElementDto.getDebtPayment();
+        BigDecimal remainDebt = paymentScheduleElementDto.getRemainDebt();
+        paymentScheduleElementDto.setTotalPayment(monthlyPayment.setScale(2, ROUNDING_MODE));
+        paymentScheduleElementDto.setInterestPayment(interestPayment.setScale(2, ROUNDING_MODE));
+        paymentScheduleElementDto.setDebtPayment(debtPayment.setScale(2, ROUNDING_MODE));
+        paymentScheduleElementDto.setRemainDebt(remainDebt.setScale(2, ROUNDING_MODE));
     }
 }

@@ -15,7 +15,9 @@ public class PaymentScheduleElementDto {
     private LocalDate date;
 
     private BigDecimal totalPayment;
-
+    /**
+     * Выплата процентов
+     */
     private BigDecimal interestPayment;
 
     private BigDecimal debtPayment;

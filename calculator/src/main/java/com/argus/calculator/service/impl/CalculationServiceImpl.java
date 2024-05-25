@@ -1,9 +1,6 @@
 package com.argus.calculator.service.impl;
 
-import com.argus.calculator.dto.CreditDto;
-import com.argus.calculator.dto.LoanOfferDto;
-import com.argus.calculator.dto.LoanStatementRequestDto;
-import com.argus.calculator.dto.ScoringDataDto;
+import com.argus.calculator.dto.*;
 import com.argus.calculator.exception.ClientDeniedException;
 import com.argus.calculator.service.CalculationService;
 import com.argus.calculator.service.CreditCalculator;
@@ -12,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static com.argus.calculator.model.enums.EmploymentStatus.UNEMPLOYED;
@@ -40,24 +38,35 @@ public class CalculationServiceImpl implements CalculationService {
         if (isDenied(scoringDataDto)) {
             throw new ClientDeniedException("Loan is denied");
         }
-        BigDecimal rate = rateCalculator.calculateScoringRate(scoringDataDto);
         BigDecimal amount = creditCalculator.calculateAmount(scoringDataDto.getAmount(), scoringDataDto.getIsInsuranceEnabled());
+        int term = scoringDataDto.getTerm();
+        BigDecimal rate = rateCalculator.calculateScoringRate(scoringDataDto);
         BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, scoringDataDto.getTerm(), rate);
-
+        BigDecimal psk = creditCalculator.calculatePSK(monthlyPayment, scoringDataDto.getTerm());
+        List<PaymentScheduleElementDto> paymentSchedule = creditCalculator.calculatePaymentSchedule(amount, scoringDataDto.getTerm(), monthlyPayment, rate);
         return CreditDto.builder()
-
+                .amount(amount)
+                .term(term)
+                .monthlyPayment(monthlyPayment.setScale(2, RoundingMode.HALF_EVEN))
+                .rate(rate)
+                .psk(psk)
+                .isInsuranceEnabled(scoringDataDto.getIsInsuranceEnabled())
+                .isSalaryClient(scoringDataDto.getIsSalaryClient())
+                .paymentSchedule(paymentSchedule)
                 .build();
     }
 
     private LoanOfferDto generateLoanOffer(LoanStatementRequestDto loanStatementRequest, boolean isInsuranceEnabled, boolean isSalaryClient) {
         BigDecimal amount = loanStatementRequest.getAmount();
         BigDecimal rate = rateCalculator.calculatePrescoringRate(isInsuranceEnabled, isSalaryClient);
+        BigDecimal totalAmount = creditCalculator.calculateAmount(amount, isInsuranceEnabled);
         int term = loanStatementRequest.getTerm();
+        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, term, rate);
         return LoanOfferDto.builder()
                 .requestedAmount(amount)
-                .totalAmount(creditCalculator.calculateAmount(amount, isInsuranceEnabled))
+                .totalAmount(totalAmount)
                 .term(term)
-                .monthlyPayment(creditCalculator.calculateMonthlyPayment(amount, term, rate))
+                .monthlyPayment(monthlyPayment)
                 .rate(rate)
                 .isInsuranceEnabled(isInsuranceEnabled)
                 .isSalaryClient(isSalaryClient)
