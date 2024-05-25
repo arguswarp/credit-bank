@@ -38,7 +38,7 @@ public class CalculationServiceImpl implements CalculationService {
     @Override
     public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
         if (isDenied(scoringDataDto)) {
-            throw new ClientDeniedException("Loan is denied");
+            throw new ClientDeniedException("В займе отказано");
         }
         BigDecimal amount = creditCalculator.calculateAmount(scoringDataDto.getAmount(), scoringDataDto.getIsInsuranceEnabled());
         int term = scoringDataDto.getTerm();

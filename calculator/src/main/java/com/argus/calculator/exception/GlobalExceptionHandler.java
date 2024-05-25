@@ -19,10 +19,9 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    //TODO add something sensible to error body
     @ExceptionHandler(value = {ClientDeniedException.class})
     public ResponseEntity<Object> handleClientDeniedException(ClientDeniedException e) {
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
     }
 
     @Override
