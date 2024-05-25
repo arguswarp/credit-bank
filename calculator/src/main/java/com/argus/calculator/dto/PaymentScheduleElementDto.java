@@ -1,10 +1,12 @@
 package com.argus.calculator.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Builder
 @Data
 public class PaymentScheduleElementDto {
 

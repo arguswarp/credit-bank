@@ -1,9 +1,9 @@
 package com.argus.calculator.dto;
 
 import com.argus.calculator.model.enums.EmploymentStatus;
+import com.argus.calculator.model.enums.Position;
 import lombok.Data;
 
-import javax.swing.text.Position;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

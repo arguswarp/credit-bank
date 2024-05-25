@@ -4,106 +4,82 @@ import com.argus.calculator.dto.CreditDto;
 import com.argus.calculator.dto.LoanOfferDto;
 import com.argus.calculator.dto.LoanStatementRequestDto;
 import com.argus.calculator.dto.ScoringDataDto;
+import com.argus.calculator.exception.ClientDeniedException;
 import com.argus.calculator.service.CalculationService;
-import org.springframework.beans.factory.annotation.Value;
+import com.argus.calculator.service.CreditCalculator;
+import com.argus.calculator.service.RateCalculator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.List;
 
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.ZERO;
-import static java.math.MathContext.DECIMAL32;
-import static java.math.RoundingMode.HALF_EVEN;
+import static com.argus.calculator.model.enums.EmploymentStatus.UNEMPLOYED;
+import static com.argus.calculator.util.CalculatorUtils.getAge;
 
 @Service
+@RequiredArgsConstructor
 public class CalculationServiceImpl implements CalculationService {
 
-    @Value("${calculator.base-rate}")
-    private BigDecimal BASE_RATE;
+    private final RateCalculator rateCalculator;
 
-    @Value("${calculator.insurance.rate-reduction}")
-    private BigDecimal INSURANCE_RATE_REDUCTION;
-
-    @Value("${calculator.client.rate-reduction}")
-    private BigDecimal CLIENT_RATE_REDUCTION;
-
-    @Value("${calculator.insurance.coefficient}")
-    private BigDecimal INSURANCE_COEFFICIENT;
-
-    private final MathContext MATH_CONTEXT = DECIMAL32;
-
-    private final RoundingMode ROUNDING_MODE = HALF_EVEN;
+    private final CreditCalculator creditCalculator;
 
     @Override
     public List<LoanOfferDto> generateLoanOffers(LoanStatementRequestDto loanStatementRequestDto) {
         return List.of(
-                generateOffer(loanStatementRequestDto, false, false),
-                generateOffer(loanStatementRequestDto, false, true),
-                generateOffer(loanStatementRequestDto, true, false),
-                generateOffer(loanStatementRequestDto, true, true)
+                generateLoanOffer(loanStatementRequestDto, false, false),
+                generateLoanOffer(loanStatementRequestDto, false, true),
+                generateLoanOffer(loanStatementRequestDto, true, false),
+                generateLoanOffer(loanStatementRequestDto, true, true)
         );
     }
 
-    private LoanOfferDto generateOffer(LoanStatementRequestDto loanStatementRequest, boolean isInsuranceEnabled, boolean isSalaryClient) {
+    @Override
+    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
+        if (isDenied(scoringDataDto)) {
+            throw new ClientDeniedException("Loan is denied");
+        }
+        BigDecimal rate = rateCalculator.calculateScoringRate(scoringDataDto);
+        BigDecimal amount = creditCalculator.calculateAmount(scoringDataDto.getAmount(), scoringDataDto.getIsInsuranceEnabled());
+        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, scoringDataDto.getTerm(), rate);
+
+        return CreditDto.builder()
+
+                .build();
+    }
+
+    private LoanOfferDto generateLoanOffer(LoanStatementRequestDto loanStatementRequest, boolean isInsuranceEnabled, boolean isSalaryClient) {
         BigDecimal amount = loanStatementRequest.getAmount();
-        BigDecimal rate = calculatePrescoringRate(isInsuranceEnabled, isSalaryClient);
+        BigDecimal rate = rateCalculator.calculatePrescoringRate(isInsuranceEnabled, isSalaryClient);
         int term = loanStatementRequest.getTerm();
         return LoanOfferDto.builder()
                 .requestedAmount(amount)
-                .totalAmount(calculatePrescoringAmount(amount, isInsuranceEnabled))
+                .totalAmount(creditCalculator.calculateAmount(amount, isInsuranceEnabled))
                 .term(term)
-                .monthlyPayment(calculatePrescoringMonthlyPayment(amount, term, rate))
+                .monthlyPayment(creditCalculator.calculateMonthlyPayment(amount, term, rate))
                 .rate(rate)
                 .isInsuranceEnabled(isInsuranceEnabled)
                 .isSalaryClient(isSalaryClient)
                 .build();
     }
 
-    @Override
-    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
-        return null;
+    private Boolean isDenied(ScoringDataDto scoringDataDto) {
+        if (scoringDataDto.getEmployment().getEmploymentStatus() == UNEMPLOYED) {
+            return true;
+        }
+        BigDecimal salary = scoringDataDto.getEmployment().getSalary();
+        if (scoringDataDto.getAmount().compareTo(salary.multiply(BigDecimal.valueOf(25))) > 0) {
+            return true;
+        }
+        long age = getAge(scoringDataDto.getBirthdate());
+        if (age > 60 || age < 20) {
+            return true;
+        }
+        if (scoringDataDto.getEmployment().getWorkExperienceTotal() < 18) {
+            return true;
+        }
+        return scoringDataDto.getEmployment().getWorkExperienceCurrent() < 3;
     }
 
-    /**
-     * Используется формула расчета аннуитетного платежа:
-     * <p>
-     * Х = С * К
-     * <p>
-     * где X — аннуитетный платеж,
-     * С — сумма кредита,
-     * К — коэффициент аннуитета.
-     * <p>
-     * Коэффициент аннуитета считается так:
-     * <p>
-     * К = (М * (1 + М) ^ S) / ((1 + М) ^ S — 1)
-     * <p>
-     * где М — месячная процентная ставка по кредиту,
-     * S — срок кредита в месяцах.
-     * @param amount Сумма кредита
-     * @param term Срок кредита в месяцах
-     * @param rate Годовая процентная ставка кредита
-     * @return Сумма ежемесячного платежа
-     */
-    private BigDecimal calculatePrescoringMonthlyPayment(BigDecimal amount, int term, BigDecimal rate) {
-        //TODO rename
-        BigDecimal monthlyRate = rate.divide(BigDecimal.valueOf(100), MATH_CONTEXT)
-                .divide(BigDecimal.valueOf(12), MATH_CONTEXT);
-        //(1 + М) ^ S
-        BigDecimal equationPart = monthlyRate.add(ONE).pow(term);
-        BigDecimal annuityCoefficient = equationPart.multiply(monthlyRate)
-                .divide(equationPart.subtract(ONE), MATH_CONTEXT);
-        return amount.multiply(annuityCoefficient).setScale(2, ROUNDING_MODE);
-    }
-
-    private BigDecimal calculatePrescoringRate(boolean isInsuranceEnabled, boolean isSalaryClient) {
-        return BASE_RATE.subtract(isInsuranceEnabled ? INSURANCE_RATE_REDUCTION : ZERO)
-                .subtract(isSalaryClient ? CLIENT_RATE_REDUCTION : ZERO);
-    }
-
-    private BigDecimal calculatePrescoringAmount(BigDecimal amount,boolean isInsuranceEnabled) {
-        return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE);
-    }
 }
