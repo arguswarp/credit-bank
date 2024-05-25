@@ -1,6 +1,7 @@
 package com.argus.calculator.service;
 
 import com.argus.calculator.dto.PaymentScheduleElementDto;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import static java.math.BigDecimal.ONE;
 import static java.math.MathContext.DECIMAL64;
 import static java.math.RoundingMode.HALF_EVEN;
 
+@AllArgsConstructor
 @Component
 public class CreditCalculator {
 
@@ -57,7 +59,7 @@ public class CreditCalculator {
     }
 
     public BigDecimal calculateAmount(BigDecimal amount, boolean isInsuranceEnabled) {
-        return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE);
+        return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE).setScale(2, ROUNDING_MODE);
     }
 
     public BigDecimal calculatePSK(BigDecimal montlyPayment, int term) {
