@@ -58,6 +58,10 @@ public class CreditCalculator {
         return amount.multiply(annuityCoefficient);
     }
 
+    public BigDecimal calculateMonthlyPayment(BigDecimal amount, int term, BigDecimal rate, RoundingMode roundingMode) {
+        return calculateMonthlyPayment(amount, term, rate).setScale(2, roundingMode);
+    }
+
     public BigDecimal calculateAmount(BigDecimal amount, boolean isInsuranceEnabled) {
         return amount.multiply(isInsuranceEnabled ? INSURANCE_COEFFICIENT : ONE).setScale(2, ROUNDING_MODE);
     }

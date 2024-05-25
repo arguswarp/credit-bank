@@ -14,7 +14,7 @@ import java.util.List;
 
 @SpringBootTest
 @Profile("test")
-class CalculationServiceImplTest {
+class CalculationServiceImplIntegrationTest {
 
     @Autowired
     private CalculationService calculationService;
@@ -40,9 +40,5 @@ class CalculationServiceImplTest {
         Assertions.assertEquals(CALCULATED_MONTHLY_PAY_SECOND, offers.get(1).getMonthlyPayment());
         Assertions.assertEquals(CALCULATED_MONTHLY_PAY_THIRD, offers.get(2).getMonthlyPayment());
         Assertions.assertEquals(CALCULATED_MONTHLY_PAY_FOURTH, offers.get(3).getMonthlyPayment());
-    }
-
-    @Test
-    void calculateCredit() {
     }
 }

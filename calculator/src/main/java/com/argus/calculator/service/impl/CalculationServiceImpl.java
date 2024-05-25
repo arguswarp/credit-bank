@@ -19,6 +19,8 @@ import static com.argus.calculator.util.CalculatorUtils.getAge;
 @RequiredArgsConstructor
 public class CalculationServiceImpl implements CalculationService {
 
+    private final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
+
     private final RateCalculator rateCalculator;
 
     private final CreditCalculator creditCalculator;
@@ -47,7 +49,7 @@ public class CalculationServiceImpl implements CalculationService {
         return CreditDto.builder()
                 .amount(amount)
                 .term(term)
-                .monthlyPayment(monthlyPayment.setScale(2, RoundingMode.HALF_EVEN))
+                .monthlyPayment(monthlyPayment.setScale(2, ROUNDING_MODE))
                 .rate(rate)
                 .psk(psk)
                 .isInsuranceEnabled(scoringDataDto.getIsInsuranceEnabled())
@@ -61,7 +63,7 @@ public class CalculationServiceImpl implements CalculationService {
         BigDecimal rate = rateCalculator.calculatePrescoringRate(isInsuranceEnabled, isSalaryClient);
         BigDecimal totalAmount = creditCalculator.calculateAmount(amount, isInsuranceEnabled);
         int term = loanStatementRequest.getTerm();
-        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, term, rate);
+        BigDecimal monthlyPayment = creditCalculator.calculateMonthlyPayment(amount, term, rate, ROUNDING_MODE);
         return LoanOfferDto.builder()
                 .requestedAmount(amount)
                 .totalAmount(totalAmount)
