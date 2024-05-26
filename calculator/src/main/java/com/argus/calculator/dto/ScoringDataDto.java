@@ -43,7 +43,7 @@ public class ScoringDataDto {
 
     @NotNull(message = "Дата рождения не должна быть пустой")
     @AgeLimit
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
+    @JsonFormat(pattern="yyyy.MM.dd")
     private LocalDate birthdate;
 
     @NotBlank(message = "Серия пасспорта не должна быть пустой")
@@ -58,7 +58,7 @@ public class ScoringDataDto {
 
     @NotNull(message = "Дата окончания срока действия не должна быть пустой")
     @Future(message = "Паспорт не должен быть просрочен")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy.MM.dd")
+    @JsonFormat(pattern="yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
     @NotBlank(message = "Подразделение выдавшее пасспорт не может быть пустым")

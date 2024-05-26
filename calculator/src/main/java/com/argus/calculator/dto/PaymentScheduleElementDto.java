@@ -1,5 +1,6 @@
 package com.argus.calculator.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class PaymentScheduleElementDto {
 
     private Integer number;
 
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate date;
 
     private BigDecimal totalPayment;
