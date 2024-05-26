@@ -87,7 +87,7 @@ class CalculatorControllerTest {
                   "dependentAmount": 0,
                   "employment": {
                     "employmentStatus": "EMPLOYED",
-                    "employerINN": "1234",
+                    "employerINN": "1234567890",
                     "salary": 100000,
                     "position": "MANAGER",
                     "workExperienceTotal": 360,
@@ -124,7 +124,7 @@ class CalculatorControllerTest {
                   "dependentAmount": 0,
                   "employment": {
                     "employmentStatus": "EMPLOYED",
-                    "employerINN": "1234",
+                    "employerINN": "1234567890",
                     "salary": 100000,
                     "position": "MANAGER",
                     "workExperienceTotal": 360,
@@ -157,7 +157,7 @@ class CalculatorControllerTest {
                   "dependentAmount": 0,
                   "employment": {
                     "employmentStatus": "UNEMPLOYED",
-                    "employerINN": "1234",
+                    "employerINN": "1234567890",
                     "salary": 1,
                     "position": "MANAGER",
                     "workExperienceTotal": 360,
@@ -172,7 +172,7 @@ class CalculatorControllerTest {
 
         mockMvc.perform(post("/calculator/calc").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("В займе отказано"));
+                .andExpect(jsonPath("$.errors").value("В займе отказано"));
     }
 
     @Test
@@ -193,7 +193,7 @@ class CalculatorControllerTest {
                   "dependentAmount": 0,
                   "employment": {
                     "employmentStatus": "EMPLOYED",
-                    "employerINN": "1234",
+                    "employerINN": "1234567890",
                     "salary": 1,
                     "position": "MANAGER",
                     "workExperienceTotal": 360,
