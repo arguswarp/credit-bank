@@ -84,8 +84,10 @@ public class ScoringDataDto {
     @NotNull(message = "Номер аккаунта не может быть пустым")
     private String accountNumber;
 
+    @NotNull(message = "Информация о наличии страховки должна присутствовать")
     private Boolean isInsuranceEnabled;
 
+    @NotNull(message = "Информация о статусе зарплатного клиента должна присутствовать")
     private Boolean isSalaryClient;
 
 }
