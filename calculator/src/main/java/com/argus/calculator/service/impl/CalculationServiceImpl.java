@@ -42,7 +42,7 @@ public class CalculationServiceImpl implements CalculationService {
     public CreditDto calculateCredit(ScoringDataDto scoringDataDto) {
         log.info("Calculate credit");
         if (isDenied(scoringDataDto)) {
-            throw new ClientDeniedException("В займе отказано");
+            throw new ClientDeniedException(String.format("В займе отказано для аккаунта: %s", scoringDataDto.getAccountNumber()));
         }
         BigDecimal amount = creditCalculator.calculateAmount(scoringDataDto.getAmount(), scoringDataDto.getIsInsuranceEnabled());
         int term = scoringDataDto.getTerm();

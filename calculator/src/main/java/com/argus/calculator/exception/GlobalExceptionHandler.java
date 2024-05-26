@@ -24,7 +24,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {ClientDeniedException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleClientDeniedException(ClientDeniedException e) {
-        log.error("Client denied", e);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errors(List.of(e.getMessage()))
                 .build(), HttpStatus.BAD_REQUEST);
