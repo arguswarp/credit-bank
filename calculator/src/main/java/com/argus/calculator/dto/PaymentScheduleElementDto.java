@@ -1,6 +1,7 @@
 package com.argus.calculator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class PaymentScheduleElementDto {
 
     private Integer number;
 
+    @Schema(type = "string", example = "2024.01.01")
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate date;
 

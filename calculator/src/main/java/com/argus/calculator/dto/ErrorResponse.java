@@ -8,5 +8,6 @@ import java.util.List;
 @Builder
 @Getter
 public class ErrorResponse {
+
     private List<String> errors;
 }

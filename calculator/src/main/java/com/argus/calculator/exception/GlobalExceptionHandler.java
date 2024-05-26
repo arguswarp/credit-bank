@@ -53,9 +53,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
         log.error(e.getMessage());
-        return ResponseEntity.internalServerError().build();
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errors(List.of("Server Error"))
+                .build(), HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -3,6 +3,7 @@ package com.argus.calculator.dto;
 import com.argus.calculator.annotation.AgeLimit;
 import com.argus.calculator.model.enums.MaritalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,21 +27,27 @@ public class ScoringDataDto {
     @Min(value = 6, message = "Срок кредита должен быть не меньше 6 месяцев ")
     private Integer term;
 
+    @Schema(type = "string", example = "John")
     @NotBlank(message = "Имя не должно быть пустым")
     @Size(min = 2, max = 30, message = "Имя должно быть от 2 до 30 символов длиной.")
     @Pattern(regexp = "^[a-zA-Z]+", message = "Имя должно состоять из латинских букв")
     private String firstName;
 
+    @Schema(type = "string", example = "Doe")
     @NotBlank(message = "Фамилия не должна быть пустой")
     @Size(min = 2, max = 30, message = "Фамилия должна быть от 2 до 30 символов длиной.")
     @Pattern(regexp = "^[a-zA-Z]+", message = "Фамилия должна состоять из латинских букв")
     private String lastName;
 
+    @Schema(type = "string", example = "Jack")
+    @Size(min = 2, max = 30, message = "Отчество должно быть от 2 до 30 символов длиной.")
     private String middleName;
 
+    @Schema(type = "string", example = "male")
     @NotBlank(message = "Пол не должен быть пустым")
     private String gender;
 
+    @Schema(type = "string", example = "2024.01.01")
     @NotNull(message = "Дата рождения не должна быть пустой")
     @AgeLimit
     @JsonFormat(pattern="yyyy.MM.dd")
@@ -56,17 +63,19 @@ public class ScoringDataDto {
     @Pattern(regexp = "^[0-9]*$", message = "Номер паспорта должен состоять только из цифр")
     private String passportNumber;
 
+    @Schema(type = "string", example = "2024.01.01")
     @NotNull(message = "Дата окончания срока действия не должна быть пустой")
     @Future(message = "Паспорт не должен быть просрочен")
     @JsonFormat(pattern="yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
-    @NotBlank(message = "Подразделение выдавшее пасспорт не может быть пустым")
+    @NotBlank(message = "Подразделение выдавшее паспорт не может быть пустым")
     private String passportIssueBranch;
 
     @NotNull(message = "Семейное положение не может быть пустым")
     private MaritalStatus maritalStatus;
 
+    @Min(value = 0, message = "Иждивенцев не может быть меньше 0")
     private Integer dependentAmount;
 
     @NotNull(message = "Информация о трудоустройстве не может быть пустой")
