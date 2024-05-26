@@ -17,19 +17,49 @@ class RateCalculatorTest {
 
     private final BigDecimal BASE_RATE = BigDecimal.valueOf(15);
 
-    private final BigDecimal INSURANCE_RATE_REDUCTION = BigDecimal.valueOf(3);
+    private final BigDecimal INSURANCE_RATE_REDUCTION = BigDecimal.valueOf(-3);
 
-    private final BigDecimal CLIENT_RATE_REDUCTION = BigDecimal.valueOf(3);
+    private final BigDecimal CLIENT_RATE_REDUCTION = BigDecimal.valueOf(-1);
 
-    private final RateCalculator rateCalculator = new RateCalculator(BASE_RATE, INSURANCE_RATE_REDUCTION, CLIENT_RATE_REDUCTION);
+    private final BigDecimal SELF_EMPLOYED_RATE_ADDITION = BigDecimal.valueOf(1);
+
+    private final BigDecimal BUSINESS_OWNER_RATE_ADDITION = BigDecimal.valueOf(3);
+
+    private final BigDecimal MANAGER_RATE_REDUCTION = BigDecimal.valueOf(-2);
+
+    private final BigDecimal TOP_MANAGER_RATE_REDUCTION = BigDecimal.valueOf(-3);
+
+    private final BigDecimal MARRIED_RATE_REDUCTION = BigDecimal.valueOf(-3);
+
+    private final BigDecimal DIVORCED_RATE_ADDITION = BigDecimal.valueOf(1);
+
+    private final BigDecimal MALE_RATE_REDUCTION = BigDecimal.valueOf(-3);
+
+    private final BigDecimal FEMALE_RATE_REDUCTION = BigDecimal.valueOf(-3);
+
+    private final BigDecimal NON_BINARY_RATE_ADDITION = BigDecimal.valueOf(7);
+
+    private final RateCalculator rateCalculator = new RateCalculator(
+            BASE_RATE,
+            INSURANCE_RATE_REDUCTION,
+            CLIENT_RATE_REDUCTION,
+            SELF_EMPLOYED_RATE_ADDITION,
+            BUSINESS_OWNER_RATE_ADDITION,
+            MANAGER_RATE_REDUCTION,
+            TOP_MANAGER_RATE_REDUCTION,
+            MARRIED_RATE_REDUCTION,
+            DIVORCED_RATE_ADDITION,
+            MALE_RATE_REDUCTION,
+            FEMALE_RATE_REDUCTION,
+            NON_BINARY_RATE_ADDITION);
 
     @Test
     void calculatePrescoringRate() {
         testRate(BASE_RATE, rateCalculator.calculatePrescoringRate(false, false));
-        testRate(BASE_RATE.subtract(CLIENT_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(false, true));
-        testRate(BASE_RATE.subtract(INSURANCE_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(true, false));
-        testRate(BASE_RATE.subtract(CLIENT_RATE_REDUCTION)
-                .subtract(INSURANCE_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(true, true));
+        testRate(BASE_RATE.add(CLIENT_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(false, true));
+        testRate(BASE_RATE.add(INSURANCE_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(true, false));
+        testRate(BASE_RATE.add(CLIENT_RATE_REDUCTION)
+                .add(INSURANCE_RATE_REDUCTION), rateCalculator.calculatePrescoringRate(true, true));
     }
 
     private void testRate(BigDecimal expected, BigDecimal rate) {
@@ -52,11 +82,11 @@ class RateCalculatorTest {
                 .build();
         BigDecimal rateFirst = rateCalculator.calculateScoringRate(scoringDataDtoFirst);
         assertNotNull(rateFirst);
-        assertEquals(BASE_RATE.subtract(CLIENT_RATE_REDUCTION)
-                        .subtract(INSURANCE_RATE_REDUCTION)
-                        .subtract(BigDecimal.valueOf(3))
-                        .subtract(BigDecimal.valueOf(3))
-                        .subtract(BigDecimal.valueOf(3)),
+        assertEquals(BASE_RATE.add(CLIENT_RATE_REDUCTION)
+                        .add(INSURANCE_RATE_REDUCTION)
+                        .add(TOP_MANAGER_RATE_REDUCTION)
+                        .add(MARRIED_RATE_REDUCTION)
+                        .add(MALE_RATE_REDUCTION),
                 rateFirst);
 
         ScoringDataDto scoringDataDtoSecond = ScoringDataDto.builder()
@@ -72,10 +102,10 @@ class RateCalculatorTest {
                 .build();
         BigDecimal rateSecond = rateCalculator.calculateScoringRate(scoringDataDtoSecond);
         assertNotNull(rateFirst);
-        assertEquals(BASE_RATE.subtract(BigDecimal.valueOf(2))
-                        .add(BigDecimal.ONE)
-                        .add(BigDecimal.ONE)
-                        .add(BigDecimal.valueOf(7)),
+        assertEquals(BASE_RATE.add(MANAGER_RATE_REDUCTION)
+                        .add(SELF_EMPLOYED_RATE_ADDITION)
+                        .add(DIVORCED_RATE_ADDITION)
+                        .add(NON_BINARY_RATE_ADDITION),
                 rateSecond);
     }
 }
