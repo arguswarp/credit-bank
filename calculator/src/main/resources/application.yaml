@@ -6,4 +6,4 @@ spring:
     default: prod
   mvc:
     format:
-      date: 'yyyy.MM/dd'
+      date: 'yyyy.MM.dd'
