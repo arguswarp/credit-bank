@@ -1,0 +1,9 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: prod
+    default: prod
+  mvc:
+    format:
+      date: 'yyyy.MM.dd'

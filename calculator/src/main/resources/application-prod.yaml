@@ -1,0 +1,23 @@
+calculator:
+  base-rate: 15
+  insurance:
+    rate-reduction: -3
+    coefficient: 1.1
+  client:
+    rate-reduction: -1
+  employment:
+    self-employed-rate-addition: 1
+    business-owner-rate-addition: 3
+  position:
+    manager-rate-reduction: -2
+    top-manager-rate-reduction: -3
+  marital-status:
+    married-rate-reduction: -3
+    divorced-rate-addition: 1
+  gender:
+    female-rate-reduction: -3
+    male-rate-reduction: -3
+    non-binary-rate-addition: 7
+logging:
+  level:
+    root: info

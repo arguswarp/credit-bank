@@ -1,0 +1,11 @@
+version: '0.1'
+
+services:
+  calculator:
+    container_name: calc-service
+    build:
+      context: calculator/
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: unless-stopped
