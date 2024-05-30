@@ -1,19 +1,18 @@
 package com.argus.deal.dto;
 
-import com.argus.calculator.model.enums.MaritalStatus;
+import com.argus.deal.model.enums.MaritalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ScoringDataDto {
 
     private BigDecimal amount;
@@ -48,7 +47,6 @@ public class ScoringDataDto {
 
     private Boolean isInsuranceEnabled;
 
-    @NotNull(message = "Информация о статусе зарплатного клиента должна присутствовать")
     private Boolean isSalaryClient;
 
 }
