@@ -1,3 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank_db
+    username: admin
+    password: admin
+  jpa:
+    generate-ddl: false
+    show-sql: true
+  liquibase:
+    enabled: true
 logging:
   level:
     root: debug

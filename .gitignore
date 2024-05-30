@@ -38,3 +38,4 @@ build/
 .DS_Store
 /.idea/
 /calculator/src/main/resources/application-dev.yaml
+/deal/.env
