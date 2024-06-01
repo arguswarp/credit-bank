@@ -29,7 +29,7 @@ public class Statement {
     private UUID id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", unique = true)
     private Client client;
 
     @OneToOne(cascade = CascadeType.ALL)

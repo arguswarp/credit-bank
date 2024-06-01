@@ -40,10 +40,10 @@ public class Client {
     private Statement statement;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "passport_id")
+    @JoinColumn(name = "passport_id", unique = true)
     private Passport passport;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employment_id")
+    @JoinColumn(name = "employment_id", unique = true)
     private Employment employment;
 }
