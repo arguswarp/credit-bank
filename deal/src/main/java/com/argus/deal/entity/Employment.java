@@ -2,6 +2,8 @@ package com.argus.deal.entity;
 
 import com.argus.deal.model.enums.EmploymentStatus;
 import com.argus.deal.model.enums.Position;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,7 +11,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "employment")
+@Table(name = "employment", schema = "bank")
+@Data
 public class Employment {
 
     @Id
@@ -18,12 +21,14 @@ public class Employment {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
     private String employerINN;
 
     private BigDecimal salary;
 
+    @Enumerated(EnumType.STRING)
     private Position position;
 
     private Integer workExperienceTotal;
@@ -31,5 +36,6 @@ public class Employment {
     private Integer workExperienceCurrent;
 
     @OneToOne(optional = false, mappedBy = "employment")
+    @ToString.Exclude
     private Client client;
 }

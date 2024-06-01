@@ -1,5 +1,6 @@
 package com.argus.deal.entity;
 
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -7,7 +8,11 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "passport")
+@Table(name = "passport", schema = "bank")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Passport {
 
     @Id
@@ -25,5 +30,6 @@ public class Passport {
     private LocalDate issueDate;
 
     @OneToOne(optional=false, mappedBy="passport")
+    @ToString.Exclude
     private Client client;
 }

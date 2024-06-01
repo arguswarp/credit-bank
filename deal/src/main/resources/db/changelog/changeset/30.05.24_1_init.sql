@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 -- changeset argus:1
 
-create schema bank;
+create schema if not exists bank;
 
 create table bank.passport
 (

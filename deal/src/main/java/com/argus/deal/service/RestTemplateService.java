@@ -1,0 +1,45 @@
+package com.argus.deal.service;
+
+import com.argus.deal.dto.LoanOfferDto;
+import com.argus.deal.dto.LoanStatementRequestDto;
+import com.argus.deal.exception.CalculatorApiException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class RestTemplateService {
+
+    private final RestTemplate restTemplate;
+
+    @Value("${deal.rest-client.root-uri}")
+    private String rootUrl;
+
+    private String OFFERS_URL = "offers";
+
+    public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto, UUID statementId) {
+        try {
+            log.info("Executing POST {}{}", rootUrl, OFFERS_URL);
+            ResponseEntity<List<LoanOfferDto>> response = restTemplate.exchange(OFFERS_URL,
+                    HttpMethod.POST, new HttpEntity<>(loanStatementRequestDto), new ParameterizedTypeReference<>() {});
+            List<LoanOfferDto> loanOffers = response.getBody();
+            loanOffers.forEach(offer -> offer.setStatementId(statementId));
+            log.info("Loan offers {}", loanOffers);
+            return loanOffers;
+        } catch (RestClientException e) {
+            throw new CalculatorApiException(e.getMostSpecificCause().getMessage());
+        }
+    }
+}

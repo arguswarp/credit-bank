@@ -1,11 +1,23 @@
 package com.argus.deal.entity;
 
+import com.argus.deal.dto.LoanOfferDto;
+import com.argus.deal.model.enums.CreditStatus;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "credit", schema = "bank")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@Data
 public class Credit {
 
     @Id
@@ -15,6 +27,29 @@ public class Credit {
     private UUID id;
 
     @OneToOne(optional=false, mappedBy="credit")
+    @ToString.Exclude
     private Statement statement;
+
+    private BigDecimal amount;
+
+    private Integer term;
+
+    private BigDecimal monthlyPayment;
+
+    private BigDecimal rate;
+
+    private BigDecimal psk;
+
+    @Type(type = "jsonb")
+    private List<LoanOfferDto> paymentSchedule;
+
+    @Column(name = "insurance_enabled")
+    private Boolean isInsuranceEnabled;
+
+    @Column(name = "salary_client")
+    private Boolean isSalaryClient;
+
+    @Enumerated(EnumType.STRING)
+    private CreditStatus creditStatus;
 
 }
