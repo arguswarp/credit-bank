@@ -11,6 +11,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -53,6 +54,6 @@ public class Statement {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private StatementStatusHistoryDto statusHistory;
+    private List<StatementStatusHistoryDto> statusHistory;
 
 }

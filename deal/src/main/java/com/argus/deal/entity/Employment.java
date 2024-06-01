@@ -21,9 +21,11 @@ public class Employment {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private EmploymentStatus employmentStatus;
 
+    @Column(name = "employer_inn")
     private String employerINN;
 
     private BigDecimal salary;
