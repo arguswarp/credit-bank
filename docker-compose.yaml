@@ -9,3 +9,36 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
+    networks:
+      - bank-net
+  deal:
+    container_name: deal-service
+    build:
+      context: deal/
+      dockerfile: Dockerfile
+    environment:
+      - DB_URL=$DB_URL
+      - DB_USERNAME=$DB_USERNAME
+      - DB_PASSWORD=$DB_PASSWORD
+    ports:
+      - 8081:8081
+    restart: unless-stopped
+    networks:
+      - bank-net
+  db:
+    image: postgres:16
+    container_name: bank-db
+    environment:
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - 5432:5432
+    networks:
+      - bank-net
+    volumes:
+      - bank_data:/var/lib/postgresql/data
+volumes:
+  bank_data:
+networks:
+  bank-net:
