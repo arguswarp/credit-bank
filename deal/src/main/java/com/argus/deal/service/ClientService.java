@@ -21,13 +21,30 @@ public class ClientService {
 
     private final ClientMapper clientMapper;
 
-    public Client save(LoanStatementRequestDto loanStatementRequestDto) {
+    public Client findOrSave(LoanStatementRequestDto loanStatementRequestDto) {
         Client client = clientMapper.loanStatementRequestDtoToClient(loanStatementRequestDto);
+        Client persistentClient = findOrSaveClient(client);
         Passport passport = client.getPassport();
         passport.setClient(client);
-        log.info("Saving passport to db {}", passport);
-        passportRepository.save(client.getPassport());
-        log.info("Saving client to db {}", client);
-        return clientRepository.save(client);
+        findOrSavePassport(passport);
+        return persistentClient;
+    }
+
+    public Client findOrSaveClient(Client client) {
+        log.info("Searching for client {}", client);
+        return clientRepository.findByPassportSeriesAndPassportNumber(client.getPassport().getSeries(), client.getPassport().getNumber())
+                .orElseGet(() -> {
+                    log.info("Saving client to db {}", client);
+                    return clientRepository.save(client);
+                });
+    }
+
+    public Passport findOrSavePassport(Passport passport) {
+        log.info("Searching for passport {} {}", passport.getSeries(), passport.getNumber());
+        return passportRepository.findBySeriesAndNumber(passport.getSeries(), passport.getNumber())
+                .orElseGet(() -> {
+                    log.info("Saving passport to db {}", passport);
+                    return passportRepository.save(passport);
+                });
     }
 }

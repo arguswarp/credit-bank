@@ -26,7 +26,7 @@ public class DealService {
     @Transactional
     public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto) {
         log.info("Getting loan offers");
-        Client persistentClient = clientService.save(loanStatementRequestDto);
+        Client persistentClient = clientService.findOrSave(loanStatementRequestDto);
         Statement persistentStatement = statementService.save(persistentClient);
         return restTemplateService.getLoanOffers(loanStatementRequestDto, persistentStatement.getId());
     }
