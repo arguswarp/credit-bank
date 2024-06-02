@@ -1,7 +1,9 @@
 package com.argus.deal.service;
 
+import com.argus.deal.dto.CreditDto;
 import com.argus.deal.dto.LoanOfferDto;
 import com.argus.deal.dto.LoanStatementRequestDto;
+import com.argus.deal.dto.ScoringDataDto;
 import com.argus.deal.exception.CalculatorApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,8 @@ public class RestTemplateService {
 
     private String OFFERS_URL = "offers";
 
+    private String CREDIT_URL = "calc";
+
     public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto, UUID statementId) {
         try {
             log.info("Executing POST {}{}", rootUrl, OFFERS_URL);
@@ -42,4 +46,18 @@ public class RestTemplateService {
             throw new CalculatorApiException(e.getMostSpecificCause().getMessage());
         }
     }
+
+    public CreditDto getCredit(ScoringDataDto scoringDataDto) {
+        try {
+            log.info("Executing POST {}{}", rootUrl, CREDIT_URL);
+            ResponseEntity<CreditDto> response = restTemplate.exchange(CREDIT_URL,
+                    HttpMethod.POST, new HttpEntity<>(scoringDataDto), new ParameterizedTypeReference<>() {});
+            CreditDto creditDto = response.getBody();
+            log.info("CreditDto {}", creditDto);
+            return creditDto;
+        } catch (RestClientException e) {
+            throw new CalculatorApiException(e.getMostSpecificCause().getMessage());
+        }
+    }
+
 }

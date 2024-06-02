@@ -1,6 +1,6 @@
 package com.argus.deal.entity;
 
-import com.argus.deal.dto.LoanOfferDto;
+import com.argus.deal.dto.PaymentScheduleElementDto;
 import com.argus.deal.model.enums.CreditStatus;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
@@ -41,7 +41,7 @@ public class Credit {
     private BigDecimal psk;
 
     @Type(type = "jsonb")
-    private List<LoanOfferDto> paymentSchedule;
+    private List<PaymentScheduleElementDto> paymentSchedule;
 
     @Column(name = "insurance_enabled")
     private Boolean isInsuranceEnabled;

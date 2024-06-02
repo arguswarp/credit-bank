@@ -1,8 +1,11 @@
 package com.argus.deal.service;
 
+import com.argus.deal.dto.FinishRegistrationRequestDto;
 import com.argus.deal.dto.LoanStatementRequestDto;
+import com.argus.deal.dto.ScoringDataDto;
 import com.argus.deal.entity.Client;
 import com.argus.deal.entity.Passport;
+import com.argus.deal.entity.Statement;
 import com.argus.deal.model.mapper.ClientMapper;
 import com.argus.deal.repository.ClientRepository;
 import com.argus.deal.repository.PassportRepository;
@@ -46,5 +49,14 @@ public class ClientService {
                     log.info("Saving passport to db {}", passport);
                     return passportRepository.save(passport);
                 });
+    }
+
+    public ScoringDataDto getScoringDataDto(Statement statement, FinishRegistrationRequestDto finishRegistrationRequestDto) {
+        Client client = statement.getClient();
+        log.info("Updating client {}", client);
+        clientMapper.update(client, finishRegistrationRequestDto);
+        clientMapper.updatePassport(client.getPassport(), finishRegistrationRequestDto);
+        Client updatedClient = clientRepository.save(client);
+        return clientMapper.from(updatedClient, client.getPassport(),statement.getAppliedOffer());
     }
 }

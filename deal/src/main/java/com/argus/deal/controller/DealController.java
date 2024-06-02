@@ -1,5 +1,6 @@
 package com.argus.deal.controller;
 
+import com.argus.deal.dto.FinishRegistrationRequestDto;
 import com.argus.deal.dto.LoanOfferDto;
 import com.argus.deal.dto.LoanStatementRequestDto;
 import com.argus.deal.service.DealService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("deal")
@@ -30,6 +32,13 @@ public class DealController {
     public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
         log.info("Received loan offer request: {}", loanOfferDto);
         dealService.selectOffer(loanOfferDto);
+    }
+
+    @PostMapping("calculate/{statementId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void calculate(@PathVariable(name = "statementId") UUID statementId, @RequestBody FinishRegistrationRequestDto finishRegistrationRequestDto) {
+        log.info("Received finish registration request: {}", finishRegistrationRequestDto);
+        dealService.calculateOffer(finishRegistrationRequestDto, statementId);
     }
 
 }

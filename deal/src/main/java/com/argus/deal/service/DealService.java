@@ -1,8 +1,8 @@
 package com.argus.deal.service;
 
-import com.argus.deal.dto.LoanOfferDto;
-import com.argus.deal.dto.LoanStatementRequestDto;
+import com.argus.deal.dto.*;
 import com.argus.deal.entity.Client;
+import com.argus.deal.entity.Credit;
 import com.argus.deal.entity.Statement;
 import com.argus.deal.exception.LoanAlreadyApprovedException;
 import com.argus.deal.model.enums.Status;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,8 @@ public class DealService {
     private final ClientService clientService;
 
     private final StatementService statementService;
+
+    private final CreditService creditService;
 
     private final RestTemplateService restTemplateService;
 
@@ -40,6 +43,18 @@ public class DealService {
         }
         statementService.changeStatus(statement, Status.APPROVED);
         statement.setAppliedOffer(loanOfferDto);
+        statementService.update(statement);
+    }
+
+    @Transactional
+    public void calculateOffer(FinishRegistrationRequestDto finishRegistrationRequestDto, UUID statementId) {
+        log.info("Calculating loan offer for statement {}", statementId);
+        Statement statement = statementService.get(statementId);
+        ScoringDataDto scoringDataDto = clientService.getScoringDataDto(statement, finishRegistrationRequestDto);
+        CreditDto creditDto = restTemplateService.getCredit(scoringDataDto);
+        Credit persistentCredit = creditService.save(creditDto);
+        statement.setCredit(persistentCredit);
+        statementService.changeStatus(statement, Status.CC_APPROVED);
         statementService.update(statement);
     }
 }

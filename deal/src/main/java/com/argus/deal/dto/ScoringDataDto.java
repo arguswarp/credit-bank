@@ -1,6 +1,7 @@
 package com.argus.deal.dto;
 
 import com.argus.deal.model.enums.MaritalStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,12 +28,14 @@ public class ScoringDataDto {
 
     private String gender;
 
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate birthdate;
 
     private String passportSeries;
 
     private String passportNumber;
 
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
     private String passportIssueBranch;

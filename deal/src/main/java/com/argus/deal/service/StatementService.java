@@ -50,6 +50,7 @@ public class StatementService {
     }
     //TODO mb null status history, check
     public void changeStatus(Statement statement, Status status) {
+        log.info("Changing statement status from {} to {}", statement.getStatus(), status);
         statement.setStatus(status);
         statement.getStatusHistory().add(StatementStatusHistoryDto.builder()
                 .status(status)
