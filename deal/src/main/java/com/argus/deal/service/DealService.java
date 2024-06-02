@@ -4,6 +4,7 @@ import com.argus.deal.dto.*;
 import com.argus.deal.entity.Client;
 import com.argus.deal.entity.Credit;
 import com.argus.deal.entity.Statement;
+import com.argus.deal.exception.CreditAlreadyCalculatedException;
 import com.argus.deal.exception.LoanAlreadyApprovedException;
 import com.argus.deal.model.enums.Status;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class DealService {
     public void selectOffer(LoanOfferDto loanOfferDto) {
         log.info("Selecting loan offer");
         Statement statement = statementService.get(loanOfferDto.getStatementId());
-        if (statement.getStatus() == Status.APPROVED) {
-            throw new LoanAlreadyApprovedException("Займ уже одобрен");
+        if (statement.getStatus() != Status.PREAPPROVAL) {
+            throw new LoanAlreadyApprovedException("Займ уже одобрен или отклонен");
         }
         statementService.changeStatus(statement, Status.APPROVED);
         statement.setAppliedOffer(loanOfferDto);
@@ -50,6 +51,9 @@ public class DealService {
     public void calculateOffer(FinishRegistrationRequestDto finishRegistrationRequestDto, UUID statementId) {
         log.info("Calculating loan offer for statement {}", statementId);
         Statement statement = statementService.get(statementId);
+        if (statement.getCredit() != null) {
+            throw new CreditAlreadyCalculatedException(String.format("Кредит для заявки %s уже расчитан, его id: %s", statementId, statement.getCredit().getId()));
+        }
         ScoringDataDto scoringDataDto = clientService.getScoringDataDto(statement, finishRegistrationRequestDto);
         CreditDto creditDto = restTemplateService.getCredit(scoringDataDto);
         Credit persistentCredit = creditService.save(creditDto);

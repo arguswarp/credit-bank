@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -44,9 +45,9 @@ public class Client {
 
     private String accountNumber;
 
-    @OneToOne(optional=false, mappedBy="client")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     @ToString.Exclude
-    private Statement statement;
+    private List<Statement> statements;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "passport_id", unique = true)

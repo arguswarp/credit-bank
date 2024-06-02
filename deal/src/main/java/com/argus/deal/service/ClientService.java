@@ -57,6 +57,6 @@ public class ClientService {
         clientMapper.update(client, finishRegistrationRequestDto);
         clientMapper.updatePassport(client.getPassport(), finishRegistrationRequestDto);
         Client updatedClient = clientRepository.save(client);
-        return clientMapper.from(updatedClient, client.getPassport(),statement.getAppliedOffer());
+        return clientMapper.from(updatedClient, client.getPassport(), statement.getAppliedOffer());
     }
 }

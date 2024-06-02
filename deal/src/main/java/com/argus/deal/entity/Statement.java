@@ -29,13 +29,13 @@ public class Statement {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id", unique = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
     @ToString.Exclude
     private Client client;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "credit_id")
+    @JoinColumn(name = "credit_id", unique = true)
     @ToString.Exclude
     private Credit credit;
 
