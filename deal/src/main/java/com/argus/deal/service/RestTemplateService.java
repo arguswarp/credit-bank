@@ -13,7 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -37,13 +37,14 @@ public class RestTemplateService {
         try {
             log.info("Executing POST {}{}", rootUrl, OFFERS_URL);
             ResponseEntity<List<LoanOfferDto>> response = restTemplate.exchange(OFFERS_URL,
-                    HttpMethod.POST, new HttpEntity<>(loanStatementRequestDto), new ParameterizedTypeReference<>() {});
+                    HttpMethod.POST, new HttpEntity<>(loanStatementRequestDto), new ParameterizedTypeReference<>() {
+                    });
             List<LoanOfferDto> loanOffers = response.getBody();
             loanOffers.forEach(offer -> offer.setStatementId(statementId));
             log.info("Loan offers {}", loanOffers);
             return loanOffers;
-        } catch (RestClientException e) {
-            throw new CalculatorApiException(e.getMostSpecificCause().getMessage());
+        } catch (HttpStatusCodeException e) {
+            throw new CalculatorApiException(e.getResponseBodyAsByteArray(), e.getStatusCode());
         }
     }
 
@@ -51,12 +52,13 @@ public class RestTemplateService {
         try {
             log.info("Executing POST {}{}", rootUrl, CREDIT_URL);
             ResponseEntity<CreditDto> response = restTemplate.exchange(CREDIT_URL,
-                    HttpMethod.POST, new HttpEntity<>(scoringDataDto), new ParameterizedTypeReference<>() {});
+                    HttpMethod.POST, new HttpEntity<>(scoringDataDto), new ParameterizedTypeReference<>() {
+                    });
             CreditDto creditDto = response.getBody();
             log.info("CreditDto {}", creditDto);
             return creditDto;
-        } catch (RestClientException e) {
-            throw new CalculatorApiException(e.getMostSpecificCause().getMessage());
+        } catch (HttpStatusCodeException e) {
+            throw new CalculatorApiException(e.getResponseBodyAsByteArray(), e.getStatusCode());
         }
     }
 

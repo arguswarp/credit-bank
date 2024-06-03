@@ -6,6 +6,7 @@ import com.argus.deal.dto.ScoringDataDto;
 import com.argus.deal.entity.Client;
 import com.argus.deal.entity.Passport;
 import com.argus.deal.entity.Statement;
+import com.argus.deal.exception.InconsistentDataException;
 import com.argus.deal.model.mapper.ClientMapper;
 import com.argus.deal.repository.ClientRepository;
 import com.argus.deal.repository.PassportRepository;
@@ -27,28 +28,14 @@ public class ClientService {
     public Client findOrSave(LoanStatementRequestDto loanStatementRequestDto) {
         Client client = clientMapper.loanStatementRequestDtoToClient(loanStatementRequestDto);
         Client persistentClient = findOrSaveClient(client);
+        if (!checkClient(client, persistentClient)) {
+            throw new InconsistentDataException("Клиент с таким паспортом уже существует");
+        }
         Passport passport = client.getPassport();
         passport.setClient(client);
         findOrSavePassport(passport);
         return persistentClient;
-    }
 
-    public Client findOrSaveClient(Client client) {
-        log.info("Searching for client {}", client);
-        return clientRepository.findByPassportSeriesAndPassportNumber(client.getPassport().getSeries(), client.getPassport().getNumber())
-                .orElseGet(() -> {
-                    log.info("Saving client to db {}", client);
-                    return clientRepository.save(client);
-                });
-    }
-
-    public Passport findOrSavePassport(Passport passport) {
-        log.info("Searching for passport {} {}", passport.getSeries(), passport.getNumber());
-        return passportRepository.findBySeriesAndNumber(passport.getSeries(), passport.getNumber())
-                .orElseGet(() -> {
-                    log.info("Saving passport to db {}", passport);
-                    return passportRepository.save(passport);
-                });
     }
 
     public ScoringDataDto getScoringDataDto(Statement statement, FinishRegistrationRequestDto finishRegistrationRequestDto) {
@@ -58,5 +45,30 @@ public class ClientService {
         clientMapper.updatePassport(client.getPassport(), finishRegistrationRequestDto);
         Client updatedClient = clientRepository.save(client);
         return clientMapper.from(updatedClient, client.getPassport(), statement.getAppliedOffer());
+    }
+
+    private Client findOrSaveClient(Client client) {
+        log.info("Searching for client {}", client);
+        return clientRepository.findByPassportSeriesAndPassportNumber(client.getPassport().getSeries(), client.getPassport().getNumber())
+                .orElseGet(() -> {
+                    log.info("Saving client to db {}", client);
+                    return clientRepository.save(client);
+                });
+    }
+
+    private Passport findOrSavePassport(Passport passport) {
+        log.info("Searching for passport {} {}", passport.getSeries(), passport.getNumber());
+        return passportRepository.findBySeriesAndNumber(passport.getSeries(), passport.getNumber())
+                .orElseGet(() -> {
+                    log.info("Saving passport to db {}", passport);
+                    return passportRepository.save(passport);
+                });
+    }
+
+    private boolean checkClient(Client fromRequest, Client fromDb) {
+        return fromRequest.getFirstName().equals(fromDb.getFirstName()) &&
+               fromRequest.getLastName().equals(fromDb.getLastName()) &&
+               fromRequest.getEmail().equals(fromDb.getEmail()) &&
+               fromRequest.getBirthdate().equals(fromDb.getBirthdate());
     }
 }

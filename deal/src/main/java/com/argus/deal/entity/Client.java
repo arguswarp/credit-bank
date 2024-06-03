@@ -39,6 +39,7 @@ public class Client {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
+
     private MaritalStatus maritalStatus;
 
     private Integer dependentAmount;
@@ -47,15 +48,18 @@ public class Client {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Statement> statements;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "passport_id", unique = true)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Passport passport;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employment_id", unique = true)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Employment employment;
 }

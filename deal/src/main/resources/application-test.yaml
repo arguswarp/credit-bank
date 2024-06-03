@@ -8,6 +8,9 @@ spring:
     show-sql: true
   liquibase:
     enabled: true
+deal:
+  rest-client:
+    root-uri: 'http://localhost:8080/calculator/'
 logging:
   level:
     root: debug
