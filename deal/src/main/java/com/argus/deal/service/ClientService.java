@@ -28,7 +28,7 @@ public class ClientService {
     public Client findOrSave(LoanStatementRequestDto loanStatementRequestDto) {
         Client client = clientMapper.loanStatementRequestDtoToClient(loanStatementRequestDto);
         Client persistentClient = findOrSaveClient(client);
-        if (!checkClient(client, persistentClient)) {
+        if (!checkEquality(client, persistentClient)) {
             throw new InconsistentDataException("Клиент с таким паспортом уже существует");
         }
         Passport passport = client.getPassport();
@@ -38,7 +38,7 @@ public class ClientService {
 
     }
 
-    public ScoringDataDto getScoringDataDto(Statement statement, FinishRegistrationRequestDto finishRegistrationRequestDto) {
+    public ScoringDataDto prepareScoringDataDto(Statement statement, FinishRegistrationRequestDto finishRegistrationRequestDto) {
         Client client = statement.getClient();
         log.info("Updating client {}", client);
         clientMapper.update(client, finishRegistrationRequestDto);
@@ -65,7 +65,7 @@ public class ClientService {
                 });
     }
 
-    private boolean checkClient(Client fromRequest, Client fromDb) {
+    private boolean checkEquality(Client fromRequest, Client fromDb) {
         return fromRequest.getFirstName().equals(fromDb.getFirstName()) &&
                fromRequest.getLastName().equals(fromDb.getLastName()) &&
                fromRequest.getEmail().equals(fromDb.getEmail()) &&

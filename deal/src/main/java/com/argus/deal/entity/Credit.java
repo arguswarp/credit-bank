@@ -3,8 +3,7 @@ package com.argus.deal.entity;
 import com.argus.deal.dto.PaymentScheduleElementDto;
 import com.argus.deal.model.enums.CreditStatus;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -17,7 +16,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "credit", schema = "bank")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Credit {
 
     @Id

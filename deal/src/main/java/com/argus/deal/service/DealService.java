@@ -54,7 +54,7 @@ public class DealService {
         if (statement.getCredit() != null) {
             throw new CreditAlreadyCalculatedException(String.format("Кредит для заявки %s уже расчитан, его id: %s", statementId, statement.getCredit().getId()));
         }
-        ScoringDataDto scoringDataDto = clientService.getScoringDataDto(statement, finishRegistrationRequestDto);
+        ScoringDataDto scoringDataDto = clientService.prepareScoringDataDto(statement, finishRegistrationRequestDto);
         CreditDto creditDto = restTemplateService.getCredit(scoringDataDto);
         Credit persistentCredit = creditService.save(creditDto);
         statement.setCredit(persistentCredit);
