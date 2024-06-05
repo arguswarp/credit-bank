@@ -2,8 +2,11 @@ package com.argus.deal.entity;
 
 import com.argus.deal.model.enums.Gender;
 import com.argus.deal.model.enums.MaritalStatus;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,6 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "client", schema = "bank")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -51,14 +55,14 @@ public class Client {
     @EqualsAndHashCode.Exclude
     private List<Statement> statements;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "passport_id", unique = true)
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Passport passport;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employment_id", unique = true)
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Employment employment;

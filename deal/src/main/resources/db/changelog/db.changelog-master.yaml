@@ -5,3 +5,7 @@ databaseChangeLog:
       file: db/changelog/changeset/01.06.2024_1_change_constraints.sql
   - include:
       file: db/changelog/changeset/04.06.2024_1_add_unique_constraints.sql
+  - include:
+      file: db/changelog/changeset/05.06.2024_1_drop_passport_employment.sql
+  - include:
+      file: db/changelog/changeset/05.06.2024_2_passport_employment_add_unique.sql

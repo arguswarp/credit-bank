@@ -8,6 +8,8 @@ import com.argus.deal.entity.Client;
 import com.argus.deal.entity.Passport;
 import org.mapstruct.*;
 
+import java.util.UUID;
+
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ClientMapper {
 
@@ -21,17 +23,16 @@ public interface ClientMapper {
     @AfterMapping
     default void mapPassport(@MappingTarget Client.ClientBuilder builder, LoanStatementRequestDto loanStatementRequestDto) {
         Passport passport = Passport.builder()
+                .id(UUID.randomUUID())
                 .series(loanStatementRequestDto.getPassportSeries())
                 .number(loanStatementRequestDto.getPassportNumber())
                 .build();
         builder.passport(passport);
     }
-
+    @Mapping(target = "employment.id", expression = "java(java.util.UUID.randomUUID())")
+    @Mapping(target = "passport.issueDate", source = "passportIssueDate")
+    @Mapping(target = "passport.issueBranch", source = "passportIssueBranch")
     void update(@MappingTarget Client client, FinishRegistrationRequestDto finishRegistrationRequestDto);
-
-    @Mapping(target = "issueDate", source = "passportIssueDate")
-    @Mapping(target = "issueBranch", source = "passportIssueBranch")
-    void updatePassport(@MappingTarget Passport passport, FinishRegistrationRequestDto finishRegistrationRequestDto);
 
     @Mapping(target = "amount", source = "loanOfferDto.requestedAmount")
     @Mapping(target = "passportSeries", source = "passport.series")
