@@ -45,10 +45,11 @@ public class StatementService {
     }
 
     public Statement get(UUID statementId) {
+        log.info("Getting statement {}", statementId);
         return statementRepository.findById(statementId)
                 .orElseThrow(()-> new StatementNotExistException("Заявка с таким UUID не существует: " + statementId));
     }
-    //TODO mb null status history, check
+
     public void changeStatus(Statement statement, Status status) {
         log.info("Changing statement status from {} to {}", statement.getStatus(), status);
         statement.setStatus(status);
