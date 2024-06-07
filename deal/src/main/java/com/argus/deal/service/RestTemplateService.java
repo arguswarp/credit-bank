@@ -29,16 +29,17 @@ public class RestTemplateService {
     @Value("${deal.rest-client.root-uri}")
     private String rootUrl;
 
-    private String OFFERS_URL = "offers";
+    private final String OFFERS_URL = "offers";
 
-    private String CREDIT_URL = "calc";
+    private final String CREDIT_URL = "calc";
 
     public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto, UUID statementId) {
         try {
-            log.info("Executing POST {}{}", rootUrl, OFFERS_URL);
+            log.info("Executing POST: {}/{}", rootUrl, OFFERS_URL);
             ResponseEntity<List<LoanOfferDto>> response = restTemplate.exchange(OFFERS_URL,
-                    HttpMethod.POST, new HttpEntity<>(loanStatementRequestDto), new ParameterizedTypeReference<>() {
-                    });
+                    HttpMethod.POST,
+                    new HttpEntity<>(loanStatementRequestDto),
+                    new ParameterizedTypeReference<>() {});
             List<LoanOfferDto> loanOffers = response.getBody();
             loanOffers.forEach(offer -> offer.setStatementId(statementId));
             log.info("Loan offers {}", loanOffers);
@@ -50,10 +51,11 @@ public class RestTemplateService {
 
     public CreditDto getCredit(ScoringDataDto scoringDataDto) {
         try {
-            log.info("Executing POST {}{}", rootUrl, CREDIT_URL);
+            log.info("Executing POST: {}/{}", rootUrl, CREDIT_URL);
             ResponseEntity<CreditDto> response = restTemplate.exchange(CREDIT_URL,
-                    HttpMethod.POST, new HttpEntity<>(scoringDataDto), new ParameterizedTypeReference<>() {
-                    });
+                    HttpMethod.POST,
+                    new HttpEntity<>(scoringDataDto),
+                    new ParameterizedTypeReference<>() {});
             CreditDto creditDto = response.getBody();
             log.info("CreditDto {}", creditDto);
             return creditDto;
