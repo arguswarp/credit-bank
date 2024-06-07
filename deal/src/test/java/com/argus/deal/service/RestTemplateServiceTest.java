@@ -5,7 +5,6 @@ import com.argus.deal.dto.LoanOfferDto;
 import com.argus.deal.dto.LoanStatementRequestDto;
 import com.argus.deal.dto.ScoringDataDto;
 import com.argus.deal.exception.CalculatorApiException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -36,10 +35,6 @@ class RestTemplateServiceTest {
 
     @Mock
     private RestTemplate restTemplate;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void getLoanOffers() {
