@@ -6,7 +6,7 @@ ENV DB_URL=jdbc:postgresql://localhost:5432/postgres
 ENV DB_USERNAME=admin
 ENV DB_PASSWORD=admin
 
-EXPOSE 8080
+EXPOSE 8081
 
 ADD target/deal-1.0-SNAPSHOT.jar app.jar
 

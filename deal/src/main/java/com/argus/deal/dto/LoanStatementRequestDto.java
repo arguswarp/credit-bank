@@ -1,6 +1,7 @@
 package com.argus.deal.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,10 @@ public class LoanStatementRequestDto {
 
     private String middleName;
 
+    @Schema(type = "string", example = "user@mail.com")
     private String email;
 
+    @Schema(type = "string", example = "1990.01.01")
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate birthdate;
 

@@ -3,6 +3,7 @@ package com.argus.deal.dto;
 import com.argus.deal.model.enums.Gender;
 import com.argus.deal.model.enums.MaritalStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class FinishRegistrationRequestDto {
 
     private Integer dependentAmount;
 
+    @Schema(type = "string", example = "user@mail.com")
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
