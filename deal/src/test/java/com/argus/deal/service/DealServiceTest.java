@@ -35,28 +35,31 @@ class DealServiceTest {
     void setUp() {
         statement = Statement.builder()
                 .id(UUID.randomUUID())
-                .status(Status.APPROVED)
                 .build();
     }
 
     @Test
     void WhenSelectOfferWithStatementStatusNotPreapproval_ThenThrowLoanAlreadyApprovedException() {
+        statement.setStatus(Status.APPROVED);
+
         when(statementService.get(statement.getId())).thenReturn(statement);
 
-       assertThrows(LoanAlreadyApprovedException.class, ()-> dealService.selectOffer(LoanOfferDto.builder()
-                       .statementId(statement.getId())
-               .build()));
+        assertThrows(LoanAlreadyApprovedException.class,
+                () -> dealService.selectOffer(LoanOfferDto.builder()
+                .statementId(statement.getId())
+                .build()));
 
-       verify(statementService).get(statement.getId());
+        verify(statementService).get(statement.getId());
     }
 
     @Test
     void WhenCalculateOfferWithStatementWithCredit_ThenThrowCreditAlreadyCalculatedException() {
         statement.setCredit(Credit.builder().build());
+
         when(statementService.get(statement.getId())).thenReturn(statement);
 
         assertThrows(CreditAlreadyCalculatedException.class,
-                ()-> dealService.calculateOffer(FinishRegistrationRequestDto.builder().build(), statement.getId()));
+                () -> dealService.calculateOffer(FinishRegistrationRequestDto.builder().build(), statement.getId()));
 
         verify(statementService).get(statement.getId());
     }

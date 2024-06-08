@@ -30,7 +30,7 @@ public class DealController {
     @PostMapping("offer/select")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
-        log.info("Received loan offer request: {}", loanOfferDto);
+        log.info("Received selected loan offer: {}", loanOfferDto);
         dealService.selectOffer(loanOfferDto);
     }
 

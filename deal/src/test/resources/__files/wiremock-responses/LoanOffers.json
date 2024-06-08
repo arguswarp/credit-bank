@@ -1,0 +1,42 @@
+[
+  {
+    "statementId": "",
+    "requestedAmount": 30000,
+    "totalAmount": 30000.00,
+    "term": 36,
+    "monthlyPayment": 1039.96,
+    "rate": 15,
+    "isInsuranceEnabled": false,
+    "isSalaryClient": false
+  },
+  {
+    "statementId": "",
+    "requestedAmount": 30000,
+    "totalAmount": 30000.00,
+    "term": 36,
+    "monthlyPayment": 1025.33,
+    "rate": 14,
+    "isInsuranceEnabled": false,
+    "isSalaryClient": true
+  },
+  {
+    "statementId": "",
+    "requestedAmount": 30000,
+    "totalAmount": 33000.00,
+    "term": 36,
+    "monthlyPayment": 996.43,
+    "rate": 12,
+    "isInsuranceEnabled": true,
+    "isSalaryClient": false
+  },
+  {
+    "statementId": "",
+    "requestedAmount": 30000,
+    "totalAmount": 33000.00,
+    "term": 36,
+    "monthlyPayment": 982.16,
+    "rate": 11,
+    "isInsuranceEnabled": true,
+    "isSalaryClient": true
+  }
+]

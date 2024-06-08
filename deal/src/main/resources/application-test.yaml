@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bank_db
+    url: jdbc:tc:postgresql://localhost:5432/test
     username: admin
     password: admin
   jpa:
@@ -10,7 +10,7 @@ spring:
     enabled: true
 deal:
   rest-client:
-    root-uri: 'http://localhost:8080/calculator/'
+    root-uri: 'http://localhost:8090/calculator/'
 logging:
   level:
-    root: debug
+    root: info

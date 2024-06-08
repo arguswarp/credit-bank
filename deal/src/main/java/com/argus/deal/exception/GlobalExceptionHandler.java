@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {CalculatorApiException.class})
     public ResponseEntity<ErrorResponse> handleCalculatorExceptions(CalculatorApiException e) throws IOException {
         ErrorResponse errorResponse = mapper.readValue(e.getBody(), ErrorResponse.class);
-        log.error("Calculator Exception with status {} and message: {}", e.getStatus(), String.join(", ", errorResponse.getErrors()));
+        log.error("Calculator exception with status {} and message: {}", e.getStatus(), String.join(", ", errorResponse.getErrors()));
         return new ResponseEntity<>(errorResponse, e.getStatus());
     }
 
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errors(List.of("Server Error"))
-                .build(), HttpStatus.BAD_REQUEST);
+                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
