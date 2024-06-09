@@ -32,7 +32,6 @@ public class ClientService {
 
     public ScoringDataDto prepareScoringDataDto(Statement statement, FinishRegistrationRequestDto finishRegistrationRequestDto) {
         Client client = statement.getClient();
-        log.info("Updating client {}", client);
         clientMapper.update(client, finishRegistrationRequestDto);
         Client updatedClient = clientRepository.save(client);
         return clientMapper.from(updatedClient, client.getPassport(), statement.getAppliedOffer());

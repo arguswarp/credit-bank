@@ -23,7 +23,6 @@ public class StatementService {
     private final StatementRepository statementRepository;
 
     public Statement save(Client client) {
-        log.info("Saving statement for client {}", client);
         Status status = Status.PREAPPROVAL;
         LocalDateTime time = LocalDateTime.now();
         Statement statement = Statement.builder()
@@ -40,12 +39,10 @@ public class StatementService {
     }
 
     public Statement update(Statement statement) {
-        log.info("Updating statement {}", statement);
         return statementRepository.save(statement);
     }
 
     public Statement get(UUID statementId) {
-        log.info("Getting statement {}", statementId);
         return statementRepository.findById(statementId)
                 .orElseThrow(()-> new StatementNotExistException("Заявка с таким UUID не существует: " + statementId));
     }

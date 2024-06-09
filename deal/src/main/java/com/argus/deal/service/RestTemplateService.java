@@ -42,7 +42,6 @@ public class RestTemplateService {
                     new ParameterizedTypeReference<>() {});
             List<LoanOfferDto> loanOffers = response.getBody();
             loanOffers.forEach(offer -> offer.setStatementId(statementId));
-            log.info("Loan offers {}", loanOffers);
             return loanOffers;
         } catch (HttpStatusCodeException e) {
             throw new CalculatorApiException(e.getResponseBodyAsByteArray(), e.getStatusCode());
@@ -56,9 +55,7 @@ public class RestTemplateService {
                     HttpMethod.POST,
                     new HttpEntity<>(scoringDataDto),
                     new ParameterizedTypeReference<>() {});
-            CreditDto creditDto = response.getBody();
-            log.info("CreditDto {}", creditDto);
-            return creditDto;
+            return response.getBody();
         } catch (HttpStatusCodeException e) {
             throw new CalculatorApiException(e.getResponseBodyAsByteArray(), e.getStatusCode());
         }

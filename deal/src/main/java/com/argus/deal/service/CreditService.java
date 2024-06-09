@@ -19,7 +19,6 @@ public class CreditService {
     private final CreditMapper creditMapper;
 
     public Credit save(CreditDto creditDto) {
-        log.info("Saving credit {}", creditDto);
         Credit credit = creditMapper.creditDtoToCredit(creditDto);
         credit.setCreditStatus(CreditStatus.CALCULATED);
         return creditRepository.save(credit);
