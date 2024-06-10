@@ -23,7 +23,7 @@ public class FinishRegistrationRequestDto {
 
     private Integer dependentAmount;
 
-    @Schema(type = "string", example = "user@mail.com")
+    @Schema(type = "string", example = "2000.01.01")
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate passportIssueDate;
 
