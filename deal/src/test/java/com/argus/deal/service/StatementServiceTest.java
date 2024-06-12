@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * ${NAME}.
+ * StatementServiceTest.
  *
  * @author Maxim Chistyakov
  */

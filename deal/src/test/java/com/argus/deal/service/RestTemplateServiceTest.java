@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * namea3cd264774bf4efb9ab609b250c5165c
+ * RestTemplateServiceTest.
  *
  * @author Maxim Chistyakov
  */

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * ${NAME}.
+ * ClientServiceTest.
  *
  * @author Maxim Chistyakov
  */
