@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * ErrorResponse.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @Getter
 @NoArgsConstructor

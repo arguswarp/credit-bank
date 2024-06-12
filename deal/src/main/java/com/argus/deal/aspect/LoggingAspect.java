@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * LoggingAspect.
+ *<p>
+ * Log input parameters and output values.
+ * @author Maxim Chistyakov
+ */
 @Aspect
 @Component
 @Slf4j

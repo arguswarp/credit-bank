@@ -9,6 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * CreditService.
+ * <p>
+ * Service to persist and get credits from db
+ * @author Maxim Chistyakov
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

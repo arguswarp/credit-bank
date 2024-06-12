@@ -15,6 +15,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * StatementService.
+ * <p>
+ * Service to persist and get statements from db.
+ * @author Maxim Chistyakov
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,7 +50,7 @@ public class StatementService {
 
     public Statement get(UUID statementId) {
         return statementRepository.findById(statementId)
-                .orElseThrow(()-> new StatementNotExistException("Заявка с таким UUID не существует: " + statementId));
+                .orElseThrow(() -> new StatementNotExistException("Заявка с таким UUID не существует: " + statementId));
     }
 
     public void changeStatus(Statement statement, Status status) {

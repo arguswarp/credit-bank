@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * FinishRegistrationRequestDto.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @Data
 @AllArgsConstructor

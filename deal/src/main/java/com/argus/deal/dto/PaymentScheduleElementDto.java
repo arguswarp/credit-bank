@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * PaymentScheduleElementDto.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @Data
 @AllArgsConstructor

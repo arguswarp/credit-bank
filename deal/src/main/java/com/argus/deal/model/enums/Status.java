@@ -1,5 +1,11 @@
 package com.argus.deal.model.enums;
 
+/**
+ * Status.
+ * <p>
+ * Statement status
+ * @author Maxim Chistyakov
+ */
 public enum Status {
     PREAPPROVAL,
     APPROVED,

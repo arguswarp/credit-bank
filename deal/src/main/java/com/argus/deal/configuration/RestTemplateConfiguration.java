@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+/**
+ * RestTemplateConfiguration.
+ *
+ * @author Maxim Chistyakov
+ */
 @Configuration
 @Slf4j
 public class RestTemplateConfiguration {

@@ -28,6 +28,11 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * ${NAME}.
+ *
+ * @author Maxim Chistyakov
+ */
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
 
@@ -113,7 +118,7 @@ class ClientServiceTest {
                         .passport(passport)
                         .build()));
 
-        assertThrows(InconsistentDataException.class, ()-> clientService.findOrSave(loanStatementRequestDto));
+        assertThrows(InconsistentDataException.class, () -> clientService.findOrSave(loanStatementRequestDto));
 
         verify(clientMapper).loanStatementRequestDtoToClient(loanStatementRequestDto);
         verify(clientRepository).findByPassportSeriesAndNumber(client.getPassport().getSeries(), client.getPassport().getNumber());
@@ -134,7 +139,7 @@ class ClientServiceTest {
                         .employerINN("1234567890")
                         .build())
                 .accountNumber("123456")
-                .passportIssueDate(LocalDate.of(2000,9,12))
+                .passportIssueDate(LocalDate.of(2000, 9, 12))
                 .dependentAmount(1)
                 .maritalStatus(MaritalStatus.MARRIED)
                 .build();
@@ -160,12 +165,12 @@ class ClientServiceTest {
             client.getPassport().setIssueBranch(finishRegistrationRequestDto1.getPassportIssueBranch());
             client.getPassport().setIssueDate(finishRegistrationRequestDto1.getPassportIssueDate());
             client.setEmployment(Employment.builder()
-                            .workExperienceCurrent(finishRegistrationRequestDto1.getEmployment().getWorkExperienceCurrent())
-                            .workExperienceTotal(finishRegistrationRequestDto1.getEmployment().getWorkExperienceTotal())
-                            .position(finishRegistrationRequestDto1.getEmployment().getPosition())
-                            .salary(finishRegistrationRequestDto1.getEmployment().getSalary())
-                            .employerINN(finishRegistrationRequestDto1.getEmployment().getEmployerINN())
-                            .employmentStatus(finishRegistrationRequestDto1.getEmployment().getEmploymentStatus())
+                    .workExperienceCurrent(finishRegistrationRequestDto1.getEmployment().getWorkExperienceCurrent())
+                    .workExperienceTotal(finishRegistrationRequestDto1.getEmployment().getWorkExperienceTotal())
+                    .position(finishRegistrationRequestDto1.getEmployment().getPosition())
+                    .salary(finishRegistrationRequestDto1.getEmployment().getSalary())
+                    .employerINN(finishRegistrationRequestDto1.getEmployment().getEmployerINN())
+                    .employmentStatus(finishRegistrationRequestDto1.getEmployment().getEmploymentStatus())
                     .build());
             client.setAccountNumber(finishRegistrationRequestDto1.getAccountNumber());
             client.setDependentAmount(finishRegistrationRequestDto1.getDependentAmount());
@@ -198,10 +203,10 @@ class ClientServiceTest {
         ScoringDataDto scoringDataDto = clientService.prepareScoringDataDto(statement, finishRegistrationRequestDto);
 
         assertNotNull(scoringDataDto);
-        assertEquals(finishRegistrationRequestDto.getGender().toString(),scoringDataDto.getGender());
-        assertEquals(statement.getAppliedOffer().getRequestedAmount(),scoringDataDto.getAmount());
-        assertEquals(statement.getAppliedOffer().getTerm(),scoringDataDto.getTerm());
-        assertEquals(loanStatementRequestDto.getBirthdate(),scoringDataDto.getBirthdate());
+        assertEquals(finishRegistrationRequestDto.getGender().toString(), scoringDataDto.getGender());
+        assertEquals(statement.getAppliedOffer().getRequestedAmount(), scoringDataDto.getAmount());
+        assertEquals(statement.getAppliedOffer().getTerm(), scoringDataDto.getTerm());
+        assertEquals(loanStatementRequestDto.getBirthdate(), scoringDataDto.getBirthdate());
         assertEquals(loanStatementRequestDto.getFirstName(), scoringDataDto.getFirstName());
         assertEquals(loanStatementRequestDto.getLastName(), scoringDataDto.getLastName());
         assertEquals(finishRegistrationRequestDto.getEmployment(), scoringDataDto.getEmployment());

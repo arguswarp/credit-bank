@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * StatementStatusHistoryDto.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @Data
 @AllArgsConstructor

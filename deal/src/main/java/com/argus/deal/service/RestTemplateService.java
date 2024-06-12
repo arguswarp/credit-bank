@@ -19,6 +19,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * RestTemplateService.
+ * <p>
+ * Service for executing responses to Calculator API endpoints.
+ * @author Maxim Chistyakov
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,9 +35,9 @@ public class RestTemplateService {
     @Value("${deal.rest-client.root-uri}")
     private String rootUrl;
 
-    private final String OFFERS_URL = "offers";
+    private static final String OFFERS_URL = "offers";
 
-    private final String CREDIT_URL = "calc";
+    private static final String CREDIT_URL = "calc";
 
     public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto, UUID statementId) {
         try {
@@ -39,7 +45,8 @@ public class RestTemplateService {
             ResponseEntity<List<LoanOfferDto>> response = restTemplate.exchange(OFFERS_URL,
                     HttpMethod.POST,
                     new HttpEntity<>(loanStatementRequestDto),
-                    new ParameterizedTypeReference<>() {});
+                    new ParameterizedTypeReference<>() {
+                    });
             List<LoanOfferDto> loanOffers = response.getBody();
             loanOffers.forEach(offer -> offer.setStatementId(statementId));
             return loanOffers;
@@ -54,7 +61,8 @@ public class RestTemplateService {
             ResponseEntity<CreditDto> response = restTemplate.exchange(CREDIT_URL,
                     HttpMethod.POST,
                     new HttpEntity<>(scoringDataDto),
-                    new ParameterizedTypeReference<>() {});
+                    new ParameterizedTypeReference<>() {
+                    });
             return response.getBody();
         } catch (HttpStatusCodeException e) {
             throw new CalculatorApiException(e.getResponseBodyAsByteArray(), e.getStatusCode());

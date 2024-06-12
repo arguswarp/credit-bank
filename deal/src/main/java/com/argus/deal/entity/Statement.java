@@ -14,8 +14,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Statement.
+ *
+ * @author Maxim Chistyakov
+ */
 @Entity
-@Table(name = "statement", schema = "bank")
+@Table(name = "statement")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Builder
 @NoArgsConstructor
@@ -39,21 +44,25 @@ public class Statement {
     @ToString.Exclude
     private Credit credit;
 
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
+    @Column(name = "applied_offer", columnDefinition = "jsonb")
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
     private LoanOfferDto appliedOffer;
 
+    @Column(name = "sign_date")
     private LocalDateTime signDate;
 
+    @Column(name = "ses_code")
     private String sesCode;
 
+    @Column(name = "status_history", columnDefinition = "jsonb")
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
     private List<StatementStatusHistoryDto> statusHistory;
 
 }

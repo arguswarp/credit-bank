@@ -1,3 +1,6 @@
+db:
+  schema:
+    name: 'bank'
 spring:
   datasource:
     url: jdbc:tc:postgresql://localhost:5432/test
@@ -6,8 +9,13 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: true
+    properties:
+      hibernate:
+        default_schema: ${db.schema.name}
   liquibase:
     enabled: true
+    default-schema: ${db.schema.name}
+    liquibase-schema: ${db.schema.name}
 deal:
   rest-client:
     root-uri: 'http://localhost:8090/calculator/'

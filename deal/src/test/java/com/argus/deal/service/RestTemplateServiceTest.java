@@ -27,6 +27,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * namea3cd264774bf4efb9ab609b250c5165c
+ *
+ * @author Maxim Chistyakov
+ */
 @ExtendWith(MockitoExtension.class)
 class RestTemplateServiceTest {
 

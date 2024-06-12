@@ -15,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * DealService.
+ * <p>
+ * Main service with business logic for API endpoints.
+ * @author Maxim Chistyakov
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

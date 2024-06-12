@@ -1,3 +1,6 @@
+db:
+  schema:
+    name: ${DB_SCHEMA}
 spring:
   datasource:
     url: ${DB_URL}
@@ -6,8 +9,13 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: false
+    properties:
+      hibernate:
+        default_schema: ${db.schema.name}
   liquibase:
     enabled: true
+    default-schema: ${db.schema.name}
+    liquibase-schema: ${db.schema.name}
 deal:
   rest-client:
     root-uri: ${ROOT_URI}

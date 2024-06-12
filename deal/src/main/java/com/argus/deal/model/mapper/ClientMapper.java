@@ -10,6 +10,11 @@ import org.mapstruct.*;
 
 import java.util.UUID;
 
+/**
+ * ClientMapper.
+ *
+ * @author Maxim Chistyakov
+ */
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ClientMapper {
 
@@ -29,6 +34,7 @@ public interface ClientMapper {
                 .build();
         builder.passport(passport);
     }
+
     @Mapping(target = "employment.id", expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "passport.issueDate", source = "passportIssueDate")
     @Mapping(target = "passport.issueBranch", source = "passportIssueBranch")

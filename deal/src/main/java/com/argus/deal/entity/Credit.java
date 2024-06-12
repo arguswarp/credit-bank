@@ -13,8 +13,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Credit.
+ *
+ * @author Maxim Chistyakov
+ */
 @Entity
-@Table(name = "credit", schema = "bank")
+@Table(name = "credit")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Builder
 @Data
@@ -28,20 +33,26 @@ public class Credit {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @OneToOne(optional=false, mappedBy="credit")
+    @OneToOne(optional = false, mappedBy = "credit")
     @ToString.Exclude
     private Statement statement;
 
+    @Column(name = "amount")
     private BigDecimal amount;
 
+    @Column(name = "term")
     private Integer term;
 
+    @Column(name = "monthly_payment")
     private BigDecimal monthlyPayment;
 
+    @Column(name = "rate")
     private BigDecimal rate;
 
+    @Column(name = "psk")
     private BigDecimal psk;
 
+    @Column(name = "payment_schedule")
     @Type(type = "jsonb")
     private List<PaymentScheduleElementDto> paymentSchedule;
 
@@ -51,6 +62,7 @@ public class Credit {
     @Column(name = "salary_client")
     private Boolean isSalaryClient;
 
+    @Column(name = "credit_status")
     @Enumerated(EnumType.STRING)
     private CreditStatus creditStatus;
 

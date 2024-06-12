@@ -24,6 +24,11 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * ${NAME}.
+ *
+ * @author Maxim Chistyakov
+ */
 @ExtendWith(MockitoExtension.class)
 class StatementServiceTest {
 
@@ -41,9 +46,9 @@ class StatementServiceTest {
     void setUp() {
         List<StatementStatusHistoryDto> statuses = new ArrayList<>();
         statuses.add(StatementStatusHistoryDto.builder()
-                        .status(Status.PREAPPROVAL)
-                        .changeType(ChangeType.AUTOMATIC)
-                        .build());
+                .status(Status.PREAPPROVAL)
+                .changeType(ChangeType.AUTOMATIC)
+                .build());
 
         statement = Statement.builder()
                 .id(UUID.randomUUID())
@@ -61,18 +66,18 @@ class StatementServiceTest {
 
         doAnswer(returnsFirstArg()).when(statementRepository).save(any(Statement.class));
 
-            Statement savedStatement = statementService.save(client);
+        Statement savedStatement = statementService.save(client);
 
-            assertNotNull(savedStatement);
-            assertEquals(client, savedStatement.getClient());
-            assertNotNull(savedStatement.getCreationDate());
-            assertEquals(1, savedStatement.getStatusHistory().size());
-            assertNotNull(savedStatement.getStatusHistory().get(0).getTime());
-            assertEquals(statement.getStatus(), savedStatement.getStatus());
-            assertEquals(statement.getStatusHistory().get(0).getStatus(), savedStatement.getStatusHistory().get(0).getStatus());
-            assertEquals(statement.getStatusHistory().get(0).getChangeType(), savedStatement.getStatusHistory().get(0).getChangeType());
+        assertNotNull(savedStatement);
+        assertEquals(client, savedStatement.getClient());
+        assertNotNull(savedStatement.getCreationDate());
+        assertEquals(1, savedStatement.getStatusHistory().size());
+        assertNotNull(savedStatement.getStatusHistory().get(0).getTime());
+        assertEquals(statement.getStatus(), savedStatement.getStatus());
+        assertEquals(statement.getStatusHistory().get(0).getStatus(), savedStatement.getStatusHistory().get(0).getStatus());
+        assertEquals(statement.getStatusHistory().get(0).getChangeType(), savedStatement.getStatusHistory().get(0).getChangeType());
 
-            verify(statementRepository).save(any(Statement.class));
+        verify(statementRepository).save(any(Statement.class));
     }
 
     @Test

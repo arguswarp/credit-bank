@@ -5,6 +5,11 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Passport.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

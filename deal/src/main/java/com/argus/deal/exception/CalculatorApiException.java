@@ -4,6 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+/**
+ * CalculatorApiException.
+ *
+ * @author Maxim Chistyakov
+ */
 @RequiredArgsConstructor
 @Getter
 public class CalculatorApiException extends RuntimeException {

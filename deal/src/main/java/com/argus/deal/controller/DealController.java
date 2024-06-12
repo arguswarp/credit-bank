@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * DealController.
+ * <p>
+ * Provides API endpoints
+ * @author Maxim Chistyakov
+ */
 @RestController
 @RequestMapping("deal")
 @RequiredArgsConstructor

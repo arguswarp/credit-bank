@@ -8,6 +8,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * EmploymentDto.
+ *
+ * @author Maxim Chistyakov
+ */
 @Data
 @Builder
 public class EmploymentDto {

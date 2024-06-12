@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * Employment.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

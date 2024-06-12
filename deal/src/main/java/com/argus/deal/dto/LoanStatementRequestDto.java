@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * LoanStatementRequestDto.
+ *
+ * @author Maxim Chistyakov
+ */
 @Builder
 @Data
 @NoArgsConstructor

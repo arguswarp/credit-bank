@@ -51,6 +51,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+/**
+ * ${NAME}.
+ *
+ * @author Maxim Chistyakov
+ */
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers(disabledWithoutDocker = true)
 @ActiveProfiles("test")
@@ -261,15 +266,15 @@ class DealControllerTest {
     void WhenCalculateOfferForStatementWithCredit_ThenStatus400() {
         Statement statement = statementService.save(client);
         statement.setCredit(Credit.builder()
-                        .amount(BigDecimal.valueOf(30000))
-                        .psk(BigDecimal.TEN)
-                        .creditStatus(CreditStatus.CALCULATED)
-                        .rate(BigDecimal.TEN)
-                        .isInsuranceEnabled(false)
-                        .isSalaryClient(false)
-                        .monthlyPayment(BigDecimal.ONE)
-                        .paymentSchedule(List.of())
-                        .term(36)
+                .amount(BigDecimal.valueOf(30000))
+                .psk(BigDecimal.TEN)
+                .creditStatus(CreditStatus.CALCULATED)
+                .rate(BigDecimal.TEN)
+                .isInsuranceEnabled(false)
+                .isSalaryClient(false)
+                .monthlyPayment(BigDecimal.ONE)
+                .paymentSchedule(List.of())
+                .term(36)
                 .build());
         statementService.update(statement);
 
