@@ -22,6 +22,9 @@
         <springdoc.version>1.8.0</springdoc.version>
         <wiremock.version>2.35.0</wiremock.version>
         <rest-assured.version>4.5.1</rest-assured.version>
+        <postgresql.version>42.3.8</postgresql.version>
+        <liquibase.version>4.9.1</liquibase.version>
+        <preliquibase.version>1.2.2</preliquibase.version>
     </properties>
 
     <dependencyManagement>
@@ -57,16 +60,18 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
         <dependency>
             <groupId>net.lbruun.springboot</groupId>
             <artifactId>preliquibase-spring-boot-starter</artifactId>
-            <version>1.2.2</version>
+            <version>${preliquibase.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -104,7 +109,6 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
