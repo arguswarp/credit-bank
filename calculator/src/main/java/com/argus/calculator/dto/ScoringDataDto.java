@@ -64,8 +64,8 @@ public class ScoringDataDto {
     private String passportNumber;
 
     @Schema(type = "string", example = "2024.01.01")
-    @NotNull(message = "Дата окончания срока действия не должна быть пустой")
-    @Future(message = "Паспорт не должен быть просрочен")
+    @NotNull(message = "Дата выдачи пасспорта не должна быть пустой")
+    @Past(message = "Дата выдачи паспорта должна быть в прошлом")
     @JsonFormat(pattern="yyyy.MM.dd")
     private LocalDate passportIssueDate;
 

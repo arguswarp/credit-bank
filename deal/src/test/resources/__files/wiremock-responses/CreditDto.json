@@ -1,0 +1,107 @@
+{
+  "amount": 500000.00,
+  "term": 12,
+  "monthlyPayment": 43263.37,
+  "rate": 7,
+  "psk": 519160.48,
+  "isInsuranceEnabled": false,
+  "isSalaryClient": false,
+  "paymentSchedule": [
+    {
+      "number": 1,
+      "date": "2024.07.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 2916.67,
+      "debtPayment": 40346.71,
+      "remainDebt": 459653.29
+    },
+    {
+      "number": 2,
+      "date": "2024.08.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 2681.31,
+      "debtPayment": 40582.06,
+      "remainDebt": 419071.23
+    },
+    {
+      "number": 3,
+      "date": "2024.09.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 2444.58,
+      "debtPayment": 40818.79,
+      "remainDebt": 378252.44
+    },
+    {
+      "number": 4,
+      "date": "2024.10.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 2206.47,
+      "debtPayment": 41056.90,
+      "remainDebt": 337195.54
+    },
+    {
+      "number": 5,
+      "date": "2024.11.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 1966.97,
+      "debtPayment": 41296.40,
+      "remainDebt": 295899.14
+    },
+    {
+      "number": 6,
+      "date": "2024.12.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 1726.08,
+      "debtPayment": 41537.29,
+      "remainDebt": 254361.85
+    },
+    {
+      "number": 7,
+      "date": "2025.01.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 1483.78,
+      "debtPayment": 41779.60,
+      "remainDebt": 212582.25
+    },
+    {
+      "number": 8,
+      "date": "2025.02.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 1240.06,
+      "debtPayment": 42023.31,
+      "remainDebt": 170558.94
+    },
+    {
+      "number": 9,
+      "date": "2025.03.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 994.93,
+      "debtPayment": 42268.45,
+      "remainDebt": 128290.49
+    },
+    {
+      "number": 10,
+      "date": "2025.04.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 748.36,
+      "debtPayment": 42515.01,
+      "remainDebt": 85775.48
+    },
+    {
+      "number": 11,
+      "date": "2025.05.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 500.36,
+      "debtPayment": 42763.02,
+      "remainDebt": 43012.47
+    },
+    {
+      "number": 12,
+      "date": "2025.06.08",
+      "totalPayment": 43263.37,
+      "interestPayment": 250.91,
+      "debtPayment": 43012.47,
+      "remainDebt": 0.00
+    }
+  ]
+}

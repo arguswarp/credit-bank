@@ -7,7 +7,7 @@ This app is a credit bank prototype based on microservice architecture using:
 
 <p>
 
-Java 17+, SpringBoot 2.7.18, PostgreSQL, Spring Data JPA, Swagger, Kafka, JUnit, Lombok
+Java 17, SpringBoot 2.7.18, PostgreSQL, Spring Data JPA, Swagger, Kafka, JUnit, Lombok
 
 ## Installation
 First clone this repository to your local machine:
