@@ -12,6 +12,8 @@ spring:
     properties:
       hibernate:
         default_schema: ${db.schema.name}
+    hibernate:
+      ddl-auto: validate
   liquibase:
     enabled: true
     default-schema: ${db.schema.name}

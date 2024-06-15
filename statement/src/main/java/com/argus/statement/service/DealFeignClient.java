@@ -21,4 +21,5 @@ public interface DealFeignClient {
 
     @PostMapping("offer/select")
     void selectOffer(@RequestBody LoanOfferDto loanOfferDto);
+
 }

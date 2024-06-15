@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 @Getter
 public class DealApiException extends RuntimeException {
+
     private final byte[] body;
 
     private final HttpStatus status;
+
 }
