@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class StatementController {
     private final StatementService statementService;
 
     @PostMapping
-    public List<LoanOfferDto> sendOffers(@Valid @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
+    public List<LoanOfferDto> sendOffers( @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
         return statementService.getLoanOffers(loanStatementRequestDto);
     }
 
