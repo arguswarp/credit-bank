@@ -41,3 +41,5 @@ build/
 /deal/.env
 /.env
 /deal/test.env
+/statement/.env
+/statement/test.env
