@@ -24,7 +24,7 @@ public class StatementController {
     private final StatementService statementService;
 
     @PostMapping
-    public List<LoanOfferDto> sendOffers( @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
+    public List<LoanOfferDto> sendOffers(@RequestBody LoanStatementRequestDto loanStatementRequestDto) {
         return statementService.getLoanOffers(loanStatementRequestDto);
     }
 
