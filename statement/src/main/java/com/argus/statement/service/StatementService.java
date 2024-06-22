@@ -13,7 +13,8 @@ import java.util.List;
 
 /**
  * StatementService
- *
+ *<p>
+ * Executes requests to Deal API.
  * @author Maxim Chistyakov
  */
 @Service
