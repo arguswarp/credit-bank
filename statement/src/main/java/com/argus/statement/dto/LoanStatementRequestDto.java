@@ -55,12 +55,12 @@ public class LoanStatementRequestDto {
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate birthdate;
 
-    @NotBlank(message = "Серия пасспорта не должна быть пустой")
+    @NotBlank(message = "Серия паспорта не должна быть пустой")
     @Size(min = 4, max = 4, message = "Серия паспорта должна состоять из 4 цифр")
     @Pattern(regexp = "^[0-9]*$", message = "Серия паспорта должна состоять только из цифр")
     private String passportSeries;
 
-    @NotBlank(message = "Номер пасспорта не должен быть пустым")
+    @NotBlank(message = "Номер паспорта не должен быть пустым")
     @Size(min = 6, max = 6, message = "Номер паспорта должен состоять из 6 цифр")
     @Pattern(regexp = "^[0-9]*$", message = "Номер паспорта должен состоять только из цифр")
     private String passportNumber;

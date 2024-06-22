@@ -20,6 +20,7 @@
         <testcontainers.version>1.18.3</testcontainers.version>
         <postgresql.version>42.3.8</postgresql.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -83,12 +84,6 @@
             <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.github.tomakehurst</groupId>-->
-<!--            <artifactId>wiremock-jre8</artifactId>-->
-<!--            <version>${wiremock.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>

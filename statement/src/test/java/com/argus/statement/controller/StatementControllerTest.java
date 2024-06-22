@@ -28,7 +28,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,6 +50,8 @@ class StatementControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private LoanStatementRequestDto request;
+
     @Container
     public static DockerComposeContainer<?> environment =
             new DockerComposeContainer<>(new File("src/test/resources/test-compose.yaml"));
@@ -68,6 +69,17 @@ class StatementControllerTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+
+        request = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(30000))
+                .term(36)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@mail.com")
+                .birthdate(LocalDate.of(1990, 1, 1))
+                .passportSeries("1234")
+                .passportNumber("123456")
+                .build();
     }
 
     @AfterAll
@@ -77,20 +89,7 @@ class StatementControllerTest {
 
     @Test
     void sendOffers() {
-        given()
-                .contentType(ContentType.JSON)
-                .body(LoanStatementRequestDto.builder()
-                        .amount(BigDecimal.valueOf(30000))
-                        .term(36)
-                        .firstName("John")
-                        .lastName("Doe")
-                        .email("john@mail.com")
-                        .birthdate(LocalDate.of(1990, 1, 1))
-                        .passportSeries("1234")
-                        .passportNumber("123456")
-                        .build())
-                .when()
-                .post("/statement")
+        postStatement(request)
                 .then()
                 .statusCode(200)
                 .body("statementId", Matchers.hasSize(4))
@@ -101,64 +100,38 @@ class StatementControllerTest {
 
     @Test
     void whenRequestWithValidationErrors_thenThrowsException() {
-        given()
-                .contentType(ContentType.JSON)
-                .body(LoanStatementRequestDto.builder()
-                        .amount(BigDecimal.valueOf(0))
-                        .term(36)
-                        .firstName("123")
-                        .lastName("Doe")
-                        .email("john@mail.com")
-                        .birthdate(LocalDate.of(1990, 1, 1))
-                        .passportSeries("1234")
-                        .passportNumber("123456")
-                        .build())
-                .when()
-                .post("/statement")
+        request.setFirstName("123");
+        request.setAmount(BigDecimal.valueOf(200));
+
+        postStatement(request)
                 .then()
                 .statusCode(400);
     }
 
     @Test
     void selectOffer() throws JsonProcessingException {
-        ExtractableResponse<Response> offers = given()
-                .contentType(ContentType.JSON)
-                .body(LoanStatementRequestDto.builder()
-                        .amount(BigDecimal.valueOf(30000))
-                        .term(36)
-                        .firstName("John")
-                        .lastName("Doe")
-                        .email("john@mail.com")
-                        .birthdate(LocalDate.of(1990, 1, 1))
-                        .passportSeries("1234")
-                        .passportNumber("123456")
-                        .build())
-                .post("/statement")
-                .then().extract();
+        ExtractableResponse <Response> offers = postStatement(request).then().statusCode(200).extract();
+        List<LoanOfferDto> offersList = objectMapper.readValue(offers.body().asString(), new TypeReference<>() {});
 
-        List<LoanOfferDto> offersList = objectMapper.readValue(offers.body().asString(), new TypeReference<>() {
+        offersList.forEach(loanOfferDto -> {
+            assertNotNull(loanOfferDto);
+            assertNotNull(loanOfferDto.getStatementId());
         });
-
-        assertNotNull(offersList.get(0));
-        UUID statementId = offersList.get(0).getStatementId();
-
-        LoanOfferDto loanOfferDto = LoanOfferDto.builder()
-                .statementId(statementId)
-                .requestedAmount(BigDecimal.valueOf(30000))
-                .totalAmount(BigDecimal.valueOf(30000))
-                .term(36)
-                .monthlyPayment(BigDecimal.valueOf(1039.96))
-                .rate(BigDecimal.valueOf(15))
-                .isInsuranceEnabled(false)
-                .isSalaryClient(false)
-                .build();
 
         given()
                 .contentType(ContentType.JSON)
-                .body(loanOfferDto)
+                .body(offersList.get(0))
                 .when()
                 .post("/statement/offer")
                 .then()
                 .statusCode(204);
+    }
+
+    private Response postStatement(Object body) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/statement");
     }
 }
