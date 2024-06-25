@@ -1,0 +1,35 @@
+version: '3.0'
+
+services:
+  calculator:
+    image: credit-bank-calculator
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    ports:
+      - "8080:8080"
+    networks:
+      - test-bank-net
+  deal:
+    image: credit-bank-deal
+    environment:
+      SPRING_PROFILES_ACTIVE: integration-test
+#    ports:
+#      - "8081:8081"
+    networks:
+      - test-bank-net
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: bank_db
+    ports:
+      - "5432:5432"
+    networks:
+      - test-bank-net
+    volumes:
+      - bank_data:/var/lib/postgresql/data
+networks:
+  test-bank-net:
+volumes:
+  bank_data:

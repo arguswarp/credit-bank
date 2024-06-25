@@ -3,7 +3,7 @@ db:
     name: 'bank'
 spring:
   datasource:
-    url: jdbc:tc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://host.docker.internal:5432/bank_db
     username: admin
     password: admin
   jpa:
@@ -20,7 +20,7 @@ spring:
     liquibase-schema: ${db.schema.name}
 deal:
   rest-client:
-    root-uri: 'http://localhost:8090/calculator/'
+    root-uri: http://host.docker.internal:8080/calculator/
 logging:
   level:
     root: info

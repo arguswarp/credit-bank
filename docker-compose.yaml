@@ -1,4 +1,4 @@
-version: '0.1'
+version: '3.0'
 
 services:
   calculator:
@@ -7,7 +7,7 @@ services:
       context: calculator/
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: unless-stopped
     networks:
       - bank-net
@@ -23,10 +23,20 @@ services:
 #      - DB_USERNAME= $DB_USERNAME
 #      - DB_PASSWORD= $DB_PASSWORD
     ports:
-      - 8081:8081
-    restart: unless-stopped
+      - "8081:8081"
     depends_on:
       - db
+    networks:
+      - bank-net
+  statement:
+    container_name: statement-service
+    env_file:
+      - ./statement/.env
+    build:
+      context: statement/
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
     networks:
       - bank-net
   db:
@@ -39,7 +49,7 @@ services:
 #      - POSTGRES_PASSWORD=$DB_PASSWORD
 #      - POSTGRES_DB=$DB_NAME
     ports:
-      - 5432:5432
+      - "5432:5432"
     networks:
       - bank-net
     volumes:
