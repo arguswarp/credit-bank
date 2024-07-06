@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          deal-client:
+            url: 'http://localhost:8081/deal/'
+logging:
+  level:
+    root: info

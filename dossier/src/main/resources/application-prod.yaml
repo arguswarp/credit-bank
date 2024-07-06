@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          deal-client:
+            url: ${DEAL_SERVICE_URL}
+logging:
+  level:
+    root: info
