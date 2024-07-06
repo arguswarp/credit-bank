@@ -72,4 +72,19 @@ public class DealController {
         dealService.calculateOffer(finishRegistrationRequestDto, statementId);
     }
 
+    @PostMapping("documents/{statementId}/send")
+    public void sendDocuments(@PathVariable(name = "statementId") UUID statementID) {
+
+    }
+
+    @PostMapping("documents/{statementId}/sign")
+    public void preSignDocuments(@PathVariable(name = "statementId") UUID statementID) {
+
+    }
+
+    @PostMapping("documents/{statementId}/code")
+    public void signDocuments(@PathVariable(name = "statementId") UUID statementID) {
+
+    }
+
 }
