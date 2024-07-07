@@ -7,6 +7,7 @@ import com.argus.deal.entity.Statement;
 import com.argus.deal.exception.CreditAlreadyCalculatedException;
 import com.argus.deal.exception.LoanAlreadyApprovedException;
 import com.argus.deal.model.enums.Status;
+import com.argus.deal.model.enums.Theme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.UUID;
  * DealService.
  * <p>
  * Main service with business logic for API endpoints.
+ *
  * @author Maxim Chistyakov
  */
 @Service
@@ -32,6 +34,8 @@ public class DealService {
     private final CreditService creditService;
 
     private final RestTemplateService restTemplateService;
+
+    private final EmailProducer emailProducer;
 
     @Transactional
     public List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto) {
@@ -50,6 +54,7 @@ public class DealService {
         statementService.changeStatus(statement, Status.APPROVED);
         statement.setAppliedOffer(loanOfferDto);
         statementService.update(statement);
+        emailProducer.send(loanOfferDto.getStatementId(), statement.getClient().getEmail(), Theme.FINISH_REGISTRATION);
     }
 
     @Transactional
@@ -65,5 +70,29 @@ public class DealService {
         statement.setCredit(persistentCredit);
         statementService.changeStatus(statement, Status.CC_APPROVED);
         statementService.update(statement);
+        emailProducer.send(statementId, statement.getClient().getEmail(), Theme.CREATE_DOCUMENTS);
+    }
+
+    @Transactional
+    public void sendDocuments(UUID statementId) {
+        log.info("Sending documents");
+        Statement statement = statementService.get(statementId);
+        statementService.changeStatus(statement, Status.DOCUMENT_CREATED);
+        emailProducer.send(statementId, statement.getClient().getEmail(), Theme.SEND_DOCUMENTS);
+    }
+
+    @Transactional
+    public void signDocuments(UUID statementID) {
+        log.info("Signing documents");
+        Statement statement = statementService.get(statementID);
+        statementService.changeStatus(statement, Status.DOCUMENT_SIGNED);
+        emailProducer.send(statementID, statement.getClient().getEmail(), Theme.SEND_SES);
+    }
+
+    public void verifySesCode(UUID statementID) {
+        log.info("Verifying ses code");
+        Statement statement = statementService.get(statementID);
+        statementService.changeStatus(statement, Status.CREDIT_ISSUED);
+        emailProducer.send(statementID, statement.getClient().getEmail(), Theme.CREDIT_ISSUED);
     }
 }

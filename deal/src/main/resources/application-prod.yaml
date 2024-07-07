@@ -18,6 +18,8 @@ spring:
     enabled: true
     default-schema: ${db.schema.name}
     liquibase-schema: ${db.schema.name}
+  kafka:
+    bootstrap-servers: 'localhost:29092'
 deal:
   rest-client:
     root-uri: ${ROOT_URI}

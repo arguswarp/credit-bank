@@ -5,6 +5,7 @@ import com.argus.deal.dto.FinishRegistrationRequestDto;
 import com.argus.deal.dto.LoanOfferDto;
 import com.argus.deal.dto.LoanStatementRequestDto;
 import com.argus.deal.service.DealService;
+import com.argus.deal.service.EmailProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,8 @@ import java.util.UUID;
 public class DealController {
 
     private final DealService dealService;
+
+    private final EmailProducer emailProducer;
 
     @Operation(summary = "Делает запрос к МС Калькулятор и перенаправляет его ответ с 4 кредитными предложениями с сохранением заявки и клиента в БД.")
     @ApiResponses(value = {
@@ -74,17 +77,17 @@ public class DealController {
 
     @PostMapping("documents/{statementId}/send")
     public void sendDocuments(@PathVariable(name = "statementId") UUID statementID) {
-
+        dealService.sendDocuments(statementID);
     }
 
     @PostMapping("documents/{statementId}/sign")
-    public void preSignDocuments(@PathVariable(name = "statementId") UUID statementID) {
-
+    public void signDocuments(@PathVariable(name = "statementId") UUID statementID) {
+        dealService.signDocuments(statementID);
     }
 
     @PostMapping("documents/{statementId}/code")
-    public void signDocuments(@PathVariable(name = "statementId") UUID statementID) {
-
+    public void verifySesCode(@PathVariable(name = "statementId") UUID statementID) {
+        dealService.verifySesCode(statementID);
     }
 
 }
