@@ -5,6 +5,8 @@ spring:
     protocol: ${PROTOCOL}
     username: ${USERNAME}
     password: ${PASSWORD}
+  kafka:
+    bootstrap-servers: 'localhost:29092'
 logging:
   level:
     root: info
