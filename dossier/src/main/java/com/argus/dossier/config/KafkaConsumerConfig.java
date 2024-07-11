@@ -30,14 +30,10 @@ public class KafkaConsumerConfig {
     @Bean
     public ConsumerFactory<String, EmailMessage> consumerFactory() {
         JsonDeserializer<EmailMessage> jsonDeserializer = new JsonDeserializer<>();
-        jsonDeserializer.addTrustedPackages("com.argus.dossier");
+        jsonDeserializer.addTrustedPackages("*");
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "group");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, jsonDeserializer);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        return new DefaultKafkaConsumerFactory<>(props);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean

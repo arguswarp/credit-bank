@@ -20,6 +20,11 @@ spring:
     liquibase-schema: ${db.schema.name}
   kafka:
     bootstrap-servers: 'localhost:29092'
+    producer:
+      properties:
+        json:
+          type:
+            mapping: 'EmailMessage:com.argus.deal.dto.EmailMessage'
 deal:
   rest-client:
     root-uri: 'http://localhost:8090/calculator/'

@@ -7,6 +7,18 @@ spring:
     password: ${PASSWORD}
   kafka:
     bootstrap-servers: 'localhost:29092'
+    consumer:
+      bootstrap-servers: 'localhost:29092'
+      group-id: 'group'
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+            type:
+              mapping: 'EmailMessage:com.argus.dossier.dto.EmailMessage'
+
 logging:
   level:
     root: info
